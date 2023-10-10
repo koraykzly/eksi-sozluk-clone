@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 import com.example.eksi.domain.Entry;
 import com.example.eksi.domain.FollowedUsers;
 import com.example.eksi.domain.User;
+import com.example.eksi.exceptions.UserNotFoundException;
 import com.example.eksi.payload.response.EntryDto;
+import com.example.eksi.payload.response.EntryFavoritedDto;
 import com.example.eksi.payload.response.UserBasicDto;
 import com.example.eksi.repositories.EntryRepository;
+import com.example.eksi.repositories.FavoriteEntriesRepository;
 import com.example.eksi.repositories.FollowedUsersRepository;
 import com.example.eksi.repositories.UserRepository;
 
@@ -30,16 +33,16 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public UserBasicDto getBasicInformations(String username) {
-        User user = userRepository.findByUsername(username).orElse(null);
-        if (user == null)
-            return null;
+    @Autowired
+    private FavoriteEntriesRepository favoriteEntriesRepository;
 
+    public UserBasicDto getBasicInformations(String username) {
+        User user = getUser(username);
         return modelMapper.map(user, UserBasicDto.class);
     }
 
     public List<EntryDto> getUserEntries(String username) {
-        User user = userRepository.findByUsername(username).orElse(null);
+        User user = getUser(username);
         List<Entry> entries = entryRepository.findByUser(user);
 
         return entries.stream()
@@ -47,20 +50,32 @@ public class UserService {
                 .toList();
     }
 
+    public List<EntryFavoritedDto> getUserFavoriteEntries(String username) {
+        return favoriteEntriesRepository
+                .findAllByUserUsername(username);
+    }
+
     public List<String> getUserFollowers(String username) {
-        User user = userRepository.findByUsername(username).orElse(null);
-        if (user == null) {
-            System.out.println("Error, user null: " + username);
-            return null;
-        }
-        List<FollowedUsers> users = followedUsersRepository.findByFollowerUserUsername(user.getUsername());
+        User user = getUser(username);
+        List<FollowedUsers> users = followedUsersRepository.findAllByFollowerUserUsername(user.getUsername());
 
         return users.stream()
                 .map(u -> u.getFollowedUser().getUsername())
                 .toList();
     }
 
-    public List<User> getUserFollowedUSers() {
-        return null;
+    public List<String> getUserFollowedBy(String username) {
+        User user = getUser(username);
+        List<FollowedUsers> users = followedUsersRepository.findAllByFollowedUserUsername(user.getUsername());
+
+        return users.stream()
+                .map(u -> u.getFollowerUser().getUsername())
+                .toList();
     }
+
+    public User getUser(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new UserNotFoundException(username + " not found"));
+    }
+
 }

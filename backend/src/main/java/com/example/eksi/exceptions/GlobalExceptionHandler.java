@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(UserNotFoundException ex, WebRequest request) {
-        return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UnauthorizedException.class)

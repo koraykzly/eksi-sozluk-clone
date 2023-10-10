@@ -4,10 +4,11 @@ import java.time.LocalDateTime;
 
 public class EntryDto {
     private String content;
-    private LocalDateTime dateTime;
+    private String title;
     private int upvoted;
     private int downvoted;
     private int favCount;
+    private LocalDateTime dateTime;
 
     public EntryDto() {
         super();
@@ -51,6 +52,14 @@ public class EntryDto {
 
     public void setFavCount(int favCount) {
         this.favCount = favCount;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }

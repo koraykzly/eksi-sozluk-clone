@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.eksi.payload.response.EntryDto;
+import com.example.eksi.payload.response.EntryFavoritedDto;
 import com.example.eksi.payload.response.UserBasicDto;
 import com.example.eksi.services.UserService;
 
@@ -39,6 +40,14 @@ public class UserController {
     public ResponseEntity<List<String>> getUserFollowers(@PathVariable String username) {
         List<String> list = userService.getUserFollowers(username);
         return ResponseEntity.ok(list);
+    }
+    
+    @GetMapping("/{username}/favorites")
+    public ResponseEntity<List<EntryFavoritedDto>> getUserFavoriteEntries(@PathVariable String username) {
+        List<EntryFavoritedDto> entries = userService.getUserFavoriteEntries(username);
+        EntryFavoritedDto dto = entries.get(0);
+        System.out.println(dto.getContent());
+        return ResponseEntity.ok(entries);
     }
 
 }

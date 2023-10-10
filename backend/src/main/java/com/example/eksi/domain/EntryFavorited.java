@@ -14,8 +14,8 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "entry_votes")
-public class FavoriteEntries {
+@Table(name = "entry_favorites")
+public class EntryFavorited {
 
     @EmbeddedId
     private FavoriteEntriesKey id;
