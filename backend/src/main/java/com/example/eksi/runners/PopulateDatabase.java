@@ -14,31 +14,29 @@ import com.example.eksi.domain.enums.*;
 @Component
 public class PopulateDatabase implements CommandLineRunner {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	@Override
-	public void run(String... args) throws Exception {
+    @Override
+    public void run(String... args) throws Exception {
 
-		
-		if(userRepository.findByUsername("johndoe").isEmpty()) {
-			User user1 = new User("johndoe", "johndoe@example.com",
-					passwordEncoder.encode("dummy"),
-					LocalDate.now(), EGender.MALE, ERole.USER);
-			userRepository.save(user1);
-			
-			System.out.println("User generated: " + user1);
+        if (userRepository.findByUsername("johndoe").isEmpty()) {
+            User user1 = new User("johndoe", "johndoe@example.com",
+                    passwordEncoder.encode("dummy"),
+                    LocalDate.now(), EGender.MALE, ERole.USER);
+            userRepository.save(user1);
 
-			user1 = userRepository.findByUsername(user1.getUsername()).orElse(null);
-			System.out.println("User fetched: " + user1);
+            System.out.println("User generated: " + user1);
 
-		} else {
-			System.out.println("User already exists: johndoe");
-		}
+            user1 = userRepository.findByUsername(user1.getUsername()).orElse(null);
+            System.out.println("User fetched: " + user1);
 
-		
-	}
+        } else {
+            System.out.println("User already exists: johndoe");
+        }
+
+    }
 }

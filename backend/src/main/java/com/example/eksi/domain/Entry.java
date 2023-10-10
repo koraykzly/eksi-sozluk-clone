@@ -22,119 +22,119 @@ import jakarta.validation.constraints.Size;
 @Table(name = "entry")
 public class Entry {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    private Long id;
 
-	@Size(min = 1, max = 51200)
-	private String content;
+    @Size(min = 1, max = 51200)
+    private String content;
 
-	@NotNull
-	private LocalDateTime dateTime;
+    @NotNull
+    private LocalDateTime dateTime;
 
-	@NotNull
-	private boolean isIncludeLink;
+    @NotNull
+    private boolean isIncludeLink;
 
-	@NotNull
-	@Enumerated(EnumType.ORDINAL)
-	private ERole writtenByRole;
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
+    private ERole writtenByRole;
 
-	@Column
-	private int upvoted;
-	@Column
-	private int downvoted;
-	@Column
-	private int favCount;
+    @Column
+    private int upvoted;
+    @Column
+    private int downvoted;
+    @Column
+    private int favCount;
 
-	@ManyToOne
-	@JoinColumn(name = "topic_id")
-	private Topic topic;
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private Topic topic;
 
-	@ManyToOne
-	private User user;
+    @ManyToOne
+    private User user;
 
-	@PrePersist
-	public void prePersist() {
-		this.dateTime = LocalDateTime.now();
-	}
+    @PrePersist
+    public void prePersist() {
+        this.dateTime = LocalDateTime.now();
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public LocalDateTime getDateTime() {
-		return dateTime;
-	}
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
 
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
-	}
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
-	public boolean isIncludeLink() {
-		return isIncludeLink;
-	}
+    public boolean isIncludeLink() {
+        return isIncludeLink;
+    }
 
-	public void setIncludeLink(boolean isIncludeLink) {
-		this.isIncludeLink = isIncludeLink;
-	}
+    public void setIncludeLink(boolean isIncludeLink) {
+        this.isIncludeLink = isIncludeLink;
+    }
 
-	public ERole getWrittenByRole() {
-		return writtenByRole;
-	}
+    public ERole getWrittenByRole() {
+        return writtenByRole;
+    }
 
-	public void setWrittenByRole(ERole writtenByRole) {
-		this.writtenByRole = writtenByRole;
-	}
+    public void setWrittenByRole(ERole writtenByRole) {
+        this.writtenByRole = writtenByRole;
+    }
 
-	public int getUpvoted() {
-		return upvoted;
-	}
+    public int getUpvoted() {
+        return upvoted;
+    }
 
-	public void setUpvoted(int upvoted) {
-		this.upvoted = upvoted;
-	}
+    public void setUpvoted(int upvoted) {
+        this.upvoted = upvoted;
+    }
 
-	public int getDownvoted() {
-		return downvoted;
-	}
+    public int getDownvoted() {
+        return downvoted;
+    }
 
-	public void setDownvoted(int downvoted) {
-		this.downvoted = downvoted;
-	}
+    public void setDownvoted(int downvoted) {
+        this.downvoted = downvoted;
+    }
 
-	public int getFavCount() {
-		return favCount;
-	}
+    public int getFavCount() {
+        return favCount;
+    }
 
-	public void setFavCount(int favCount) {
-		this.favCount = favCount;
-	}
+    public void setFavCount(int favCount) {
+        this.favCount = favCount;
+    }
 
-	public Topic getTopic() {
-		return topic;
-	}
+    public Topic getTopic() {
+        return topic;
+    }
 
-	public void setTopic(Topic topic) {
-		this.topic = topic;
-	}
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -18,25 +18,25 @@ import jakarta.validation.constraints.Size;
 @Table(name = "topic")
 public class Topic {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Size(min = 1, message = "Enter atleast 1 character")
-	@Size(max = 256, message = "Enter maximum 256 characters")
-	private String title;
+    @Size(min = 1, message = "Enter atleast 1 character")
+    @Size(max = 256, message = "Enter maximum 256 characters")
+    private String title;
 
-	@NotNull
-	private LocalDate createdDatetime;
+    @NotNull
+    private LocalDate createdDatetime;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	@Column
-	private LocalDateTime lastEntered;
+    @Column
+    private LocalDateTime lastEntered;
 
-	@Column
-	private int entryCountSinceMidnight;
+    @Column
+    private int entryCountSinceMidnight;
 
 }

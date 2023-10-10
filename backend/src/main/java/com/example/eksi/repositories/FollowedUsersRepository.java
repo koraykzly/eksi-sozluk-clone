@@ -8,6 +8,6 @@ import com.example.eksi.domain.FollowedUsers;
 import com.example.eksi.domain.keys.FollowedUsersKey;
 
 public interface FollowedUsersRepository
-		extends JpaRepository<FollowedUsers, FollowedUsersKey> {
-	List<FollowedUsers> findByFollowerUserUsername(String username);
+        extends JpaRepository<FollowedUsers, FollowedUsersKey> {
+    List<FollowedUsers> findByFollowerUserUsername(String username);
 }

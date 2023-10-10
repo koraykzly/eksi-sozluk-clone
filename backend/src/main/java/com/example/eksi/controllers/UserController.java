@@ -17,28 +17,28 @@ import com.example.eksi.services.UserService;
 @RequestMapping("/api/user")
 public class UserController {
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
 
-	@GetMapping("/{username}")
-	public ResponseEntity<UserBasicDto> getUser(@PathVariable String username) {
-		UserBasicDto user = userService.getBasicInformations(username);
-		if (user == null) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(user);
-	}
+    @GetMapping("/{username}")
+    public ResponseEntity<UserBasicDto> getUser(@PathVariable String username) {
+        UserBasicDto user = userService.getBasicInformations(username);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
+    }
 
-	@GetMapping("/{username}/entries")
-	public ResponseEntity<List<EntryDto>> getUserEntries(@PathVariable String username) {
-		List<EntryDto> entries = userService.getUserEntries(username);
-		return ResponseEntity.ok(entries);
-	}
+    @GetMapping("/{username}/entries")
+    public ResponseEntity<List<EntryDto>> getUserEntries(@PathVariable String username) {
+        List<EntryDto> entries = userService.getUserEntries(username);
+        return ResponseEntity.ok(entries);
+    }
 
-	@GetMapping("/{username}/followers")
-	public ResponseEntity<List<String>> getUserFollowers(@PathVariable String username) {
-		List<String> list = userService.getUserFollowers(username);
-		return ResponseEntity.ok(list);
-	}
+    @GetMapping("/{username}/followers")
+    public ResponseEntity<List<String>> getUserFollowers(@PathVariable String username) {
+        List<String> list = userService.getUserFollowers(username);
+        return ResponseEntity.ok(list);
+    }
 
 }

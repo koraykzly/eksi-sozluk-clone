@@ -1,12 +1,11 @@
 package com.example.eksi.domain;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.example.eksi.domain.enums.EVote;
+import com.example.eksi.domain.keys.EntryVotedKey;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,43 +19,28 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "entry_votes")
 public class EntryVoted {
-	
-	@EmbeddedId
-	private EntryVotedKey id;
-	
-	@ManyToOne
+
+    @EmbeddedId
+    private EntryVotedKey id;
+
+    @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
-	private User user;
-	
-	@ManyToOne
+    private User user;
+
+    @ManyToOne
     @MapsId("entryId")
     @JoinColumn(name = "entry_id")
-	private Entry entry;
+    private Entry entry;
 
-	@Column
-	private LocalDateTime datetime;
+    @Column
+    private LocalDateTime datetime;
 
-	@Enumerated(EnumType.ORDINAL)
-	private EVote type;
+    @Enumerated(EnumType.ORDINAL)
+    private EVote type;
 
-	@PrePersist
-	public void prePersist() {
-		this.datetime = LocalDateTime.now();
-	}
-}
-
-@Embeddable
-class EntryVotedKey implements Serializable {
-
-	private static final long serialVersionUID = -7363807410153846453L;
-
-	@Column(name = "user_id")
-    Long userId;
-
-    @Column(name = "entry_id")
-    Long entryId;
-
-    // standard constructors, getters, and setters
-    // hashcode and equals implementation
+    @PrePersist
+    public void prePersist() {
+        this.datetime = LocalDateTime.now();
+    }
 }

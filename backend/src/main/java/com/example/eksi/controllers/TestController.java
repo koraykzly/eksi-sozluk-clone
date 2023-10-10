@@ -18,30 +18,30 @@ import com.example.eksi.services.TopicService;
 @RequestMapping(value = "/api/")
 public class TestController {
 
-	@Autowired
-	private TopicRepository topicRepository;
+    @Autowired
+    private TopicRepository topicRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private TopicService topicService;
+    @Autowired
+    private TopicService topicService;
 
-	@GetMapping(value = "/test")
-	public HelloWorldBean getTest() {
-		topicRepository.findAll(Pageable.ofSize(5));
+    @GetMapping(value = "/test")
+    public HelloWorldBean getTest() {
+        topicRepository.findAll(Pageable.ofSize(5));
 
-		Optional<User> u = userRepository.findById(1L);
-		if(u.isPresent()) {
-			
-		}
+        Optional<User> u = userRepository.findById(1L);
+        if (u.isPresent()) {
 
-		return new HelloWorldBean("test-bean");
-	}
+        }
 
-	@GetMapping(value = "/")
-	public String getRoot() {
-		return "This is root";
-	}
+        return new HelloWorldBean("test-bean");
+    }
+
+    @GetMapping(value = "/")
+    public String getRoot() {
+        return "This is root";
+    }
 
 }

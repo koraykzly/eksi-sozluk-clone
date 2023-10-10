@@ -7,15 +7,15 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class EksiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EksiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EksiApplication.class, args);
+    }
 
-	@SuppressWarnings("unused")
-	private void getBeanList(ConfigurableApplicationContext context) {
-		String[] beanNames = context.getBeanDefinitionNames();
-		for (String beanName : beanNames) {
-			System.out.println(beanName);
-		}
-	}
+    @SuppressWarnings("unused")
+    private void getBeanList(ConfigurableApplicationContext context) {
+        String[] beanNames = context.getBeanDefinitionNames();
+        for (String beanName : beanNames) {
+            System.out.println(beanName);
+        }
+    }
 }

@@ -18,49 +18,49 @@ import com.example.eksi.repositories.UserRepository;
 @Service
 public class UserService {
 
-	@Autowired
-	UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
-	@Autowired
-	EntryRepository entryRepository;
+    @Autowired
+    EntryRepository entryRepository;
 
-	@Autowired
-	FollowedUsersRepository followedUsersRepository;
+    @Autowired
+    FollowedUsersRepository followedUsersRepository;
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	public UserBasicDto getBasicInformations(String username) {
-		User user = userRepository.findByUsername(username).orElse(null);
-		if (user == null)
-			return null;
+    public UserBasicDto getBasicInformations(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null)
+            return null;
 
-		return modelMapper.map(user, UserBasicDto.class);
-	}
+        return modelMapper.map(user, UserBasicDto.class);
+    }
 
-	public List<EntryDto> getUserEntries(String username) {
-		User user = userRepository.findByUsername(username).orElse(null);
-		List<Entry> entries = entryRepository.findByUser(user);
+    public List<EntryDto> getUserEntries(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        List<Entry> entries = entryRepository.findByUser(user);
 
-		return entries.stream()
-				.map(entry -> modelMapper.map(entry, EntryDto.class))
-				.toList();
-	}
+        return entries.stream()
+                .map(entry -> modelMapper.map(entry, EntryDto.class))
+                .toList();
+    }
 
-	public List<String> getUserFollowers(String username) {
-		User user = userRepository.findByUsername(username).orElse(null);
-		if (user == null) {
-			System.out.println("Error, user null: " + username);
-			return null;
-		}
-		List<FollowedUsers> users = followedUsersRepository.findByFollowerUserUsername(user.getUsername());
+    public List<String> getUserFollowers(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            System.out.println("Error, user null: " + username);
+            return null;
+        }
+        List<FollowedUsers> users = followedUsersRepository.findByFollowerUserUsername(user.getUsername());
 
-		return users.stream()
-				.map(u -> u.getFollowedUser().getUsername())
-				.toList();
-	}
+        return users.stream()
+                .map(u -> u.getFollowedUser().getUsername())
+                .toList();
+    }
 
-	public List<User> getUserFollowedUSers() {
-		return null;
-	}
+    public List<User> getUserFollowedUSers() {
+        return null;
+    }
 }

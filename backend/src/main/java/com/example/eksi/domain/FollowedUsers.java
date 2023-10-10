@@ -17,57 +17,57 @@ import jakarta.persistence.Table;
 @Table(name = "followed_users")
 public class FollowedUsers {
 
-	@EmbeddedId
-	private FollowedUsersKey id;
+    @EmbeddedId
+    private FollowedUsersKey id;
 
-	@ManyToOne
-	@MapsId("followerUserId")
-	@JoinColumn(name = "follower_user_id")
-	private User followerUser;
+    @ManyToOne
+    @MapsId("followerUserId")
+    @JoinColumn(name = "follower_user_id")
+    private User followerUser;
 
-	@ManyToOne
-	@MapsId("followedUserId")
-	@JoinColumn(name = "followed_user_id")
-	private User followedUser;
+    @ManyToOne
+    @MapsId("followedUserId")
+    @JoinColumn(name = "followed_user_id")
+    private User followedUser;
 
-	@Column
-	private LocalDateTime datetime;
+    @Column
+    private LocalDateTime datetime;
 
-	@PrePersist
-	public void prePersist() {
-		this.datetime = LocalDateTime.now();
-	}
+    @PrePersist
+    public void prePersist() {
+        this.datetime = LocalDateTime.now();
+    }
 
-	public FollowedUsersKey getId() {
-		return id;
-	}
+    public FollowedUsersKey getId() {
+        return id;
+    }
 
-	public void setId(FollowedUsersKey id) {
-		this.id = id;
-	}
+    public void setId(FollowedUsersKey id) {
+        this.id = id;
+    }
 
-	public User getFollowerUser() {
-		return followerUser;
-	}
+    public User getFollowerUser() {
+        return followerUser;
+    }
 
-	public void setFollowerUser(User followerUser) {
-		this.followerUser = followerUser;
-	}
+    public void setFollowerUser(User followerUser) {
+        this.followerUser = followerUser;
+    }
 
-	public User getFollowedUser() {
-		return followedUser;
-	}
+    public User getFollowedUser() {
+        return followedUser;
+    }
 
-	public void setFollowedUser(User followedUser) {
-		this.followedUser = followedUser;
-	}
+    public void setFollowedUser(User followedUser) {
+        this.followedUser = followedUser;
+    }
 
-	public LocalDateTime getDatetime() {
-		return datetime;
-	}
+    public LocalDateTime getDatetime() {
+        return datetime;
+    }
 
-	public void setDatetime(LocalDateTime datetime) {
-		this.datetime = datetime;
-	}
+    public void setDatetime(LocalDateTime datetime) {
+        this.datetime = datetime;
+    }
 
 }

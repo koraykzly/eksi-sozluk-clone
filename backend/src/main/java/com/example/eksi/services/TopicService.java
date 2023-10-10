@@ -10,21 +10,21 @@ import com.example.eksi.repositories.TopicRepository;
 
 @Service
 public class TopicService {
-	
-	@Autowired
-	TopicRepository topicRepository;
 
-	// bugün
-	public List<Topic> getTodayTopics() {
-		return null;
-	}
-	
-	// gündem
-	public List<Topic> getPopularTopics() {
-		return null;
-	}
-	
-	public List<Topic> searchTopics() {
-		return null;
-	}
+    @Autowired
+    TopicRepository topicRepository;
+
+    // bugün
+    public List<Topic> getTodayTopics() {
+        return null;
+    }
+
+    // gündem
+    public List<Topic> getPopularTopics() {
+        return null;
+    }
+
+    public List<Topic> searchTopics() {
+        return null;
+    }
 }

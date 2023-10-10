@@ -20,38 +20,38 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "problematic_answer_voted")
 public class ProblematicAnswerVoted {
-	
-	@EmbeddedId
-	private ProblematicAnswerVotedKey id;
-	
-	@ManyToOne
+
+    @EmbeddedId
+    private ProblematicAnswerVotedKey id;
+
+    @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
-	private User user;
-	
-	@ManyToOne
+    private User user;
+
+    @ManyToOne
     @MapsId("problematicId")
     @JoinColumn(name = "problematic_id")
-	private Problematic problematic;
+    private Problematic problematic;
 
-	@Column
-	private LocalDateTime datetime;
+    @Column
+    private LocalDateTime datetime;
 
-	@Enumerated(EnumType.ORDINAL)
-	private EVote type;
+    @Enumerated(EnumType.ORDINAL)
+    private EVote type;
 
-	@PrePersist
-	public void prePersist() {
-		this.datetime = LocalDateTime.now();
-	}
+    @PrePersist
+    public void prePersist() {
+        this.datetime = LocalDateTime.now();
+    }
 }
 
 @Embeddable
 class ProblematicAnswerVotedKey implements Serializable {
 
-	private static final long serialVersionUID = 3108748429405574981L;
+    private static final long serialVersionUID = 3108748429405574981L;
 
-	@Column(name = "user_id")
+    @Column(name = "user_id")
     Long userId;
 
     @Column(name = "problematic_id")

@@ -19,70 +19,70 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
-	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-	@Value("${jwt.secret}")
-	private String jwtSecret;
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
-	@Value("${jwt.access.expirationMin}")
-	private int jwtAccessExpirationMin;
+    @Value("${jwt.access.expirationMin}")
+    private int jwtAccessExpirationMin;
 
-	@Value("${jwt.refresh.expirationMin}")
-	private int jwtRefreshExpirationMin;
+    @Value("${jwt.refresh.expirationMin}")
+    private int jwtRefreshExpirationMin;
 
-	public JwtBuilder generateJwtBase(Authentication authentication) {
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-		return Jwts.builder()
-				.setSubject((userPrincipal.getUsername()))
-				.setIssuedAt(new Date())
-				.signWith(key(), SignatureAlgorithm.HS256);
-	}
+    public JwtBuilder generateJwtBase(Authentication authentication) {
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        return Jwts.builder()
+                .setSubject((userPrincipal.getUsername()))
+                .setIssuedAt(new Date())
+                .signWith(key(), SignatureAlgorithm.HS256);
+    }
 
-	public String generateAccessToken(Authentication authentication) {
-		return generateJwtBase(authentication)
-				.setExpiration(new Date((new Date()).getTime() + getMilisecond(jwtAccessExpirationMin)))
-				.compact();
-	}
+    public String generateAccessToken(Authentication authentication) {
+        return generateJwtBase(authentication)
+                .setExpiration(new Date((new Date()).getTime() + getMilisecond(jwtAccessExpirationMin)))
+                .compact();
+    }
 
-	public String generateRefreshToken(Authentication authentication) {
-		return generateJwtBase(authentication)
-				.setExpiration(new Date((new Date()).getTime() + getMilisecond(jwtRefreshExpirationMin)))
-				.compact();
-	}
-	
-	public JwtPair generateJwtPair(Authentication authentication) {
-		return new JwtPair(
-				generateAccessToken(authentication),
-				generateRefreshToken(authentication));
-	}
+    public String generateRefreshToken(Authentication authentication) {
+        return generateJwtBase(authentication)
+                .setExpiration(new Date((new Date()).getTime() + getMilisecond(jwtRefreshExpirationMin)))
+                .compact();
+    }
 
-	private long getMilisecond(int minute) {
-		return minute * 60 * 1000L;
-	}
+    public JwtPair generateJwtPair(Authentication authentication) {
+        return new JwtPair(
+                generateAccessToken(authentication),
+                generateRefreshToken(authentication));
+    }
 
-	private Key key() {
-		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
-	}
+    private long getMilisecond(int minute) {
+        return minute * 60 * 1000L;
+    }
 
-	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody().getSubject();
-	}
+    private Key key() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+    }
 
-	public boolean validateJwtToken(String authToken) {
-		System.out.println("JwtUtils.validateJwtToken");
-		try {
-			Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
-			return true;
-		} catch (MalformedJwtException e) {
-			logger.error("Invalid JWT token: {}", e.getMessage());
-		} catch (ExpiredJwtException e) {
-			logger.error("JWT token is expired: {}", e.getMessage());
-		} catch (UnsupportedJwtException e) {
-			logger.error("JWT token is unsupported: {}", e.getMessage());
-		} catch (IllegalArgumentException e) {
-			logger.error("JWT claims string is empty: {}", e.getMessage());
-		}
+    public String getUserNameFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody().getSubject();
+    }
 
-		return false;
-	}
+    public boolean validateJwtToken(String authToken) {
+        System.out.println("JwtUtils.validateJwtToken");
+        try {
+            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+            return true;
+        } catch (MalformedJwtException e) {
+            logger.error("Invalid JWT token: {}", e.getMessage());
+        } catch (ExpiredJwtException e) {
+            logger.error("JWT token is expired: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            logger.error("JWT token is unsupported: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            logger.error("JWT claims string is empty: {}", e.getMessage());
+        }
+
+        return false;
+    }
 }

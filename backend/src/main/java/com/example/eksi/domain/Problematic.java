@@ -17,32 +17,32 @@ import jakarta.validation.constraints.Size;
 @Table(name = "problematic")
 public class Problematic {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	@ManyToOne
-	@JoinColumn(name = "topic_id")
-	private Topic topic;
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private Topic topic;
 
-	@Size(min = 1, max = 51200)
-	private String content;
+    @Size(min = 1, max = 51200)
+    private String content;
 
-	@Column
-	private LocalDateTime datetime;
+    @Column
+    private LocalDateTime datetime;
 
-	@PrePersist
-	public void prePersist() {
-		this.datetime = LocalDateTime.now();
-	}
-	
-	@Column
-	private int upvoted;
+    @PrePersist
+    public void prePersist() {
+        this.datetime = LocalDateTime.now();
+    }
 
-	@Column
-	private int downvoted;
+    @Column
+    private int upvoted;
+
+    @Column
+    private int downvoted;
 }

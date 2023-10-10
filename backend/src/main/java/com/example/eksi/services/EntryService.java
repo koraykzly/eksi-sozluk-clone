@@ -10,18 +10,16 @@ import com.example.eksi.repositories.TopicRepository;
 
 @Service
 public class EntryService {
-	
-	@Autowired
-	TopicRepository topicRepository;
 
-	public List<Topic> getEntries(Long topic_id) {
-		return null;
-	}
-	
-	public List<Topic> searchInEntries(Long topic_id) {
-		return null;
-	}
-	
-	
-	
+    @Autowired
+    TopicRepository topicRepository;
+
+    public List<Topic> getEntries(Long topic_id) {
+        return null;
+    }
+
+    public List<Topic> searchInEntries(Long topic_id) {
+        return null;
+    }
+
 }

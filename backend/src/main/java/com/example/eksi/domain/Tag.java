@@ -9,15 +9,15 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "tag")
 public class Tag {
 
-	@Id
-	private short id;
+    @Id
+    private short id;
 
-	@NotNull
-	private String name;
+    @NotNull
+    private String name;
 
-	public Tag(short id, @NotNull String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+    public Tag(short id, @NotNull String name) {
+        super();
+        this.id = id;
+        this.name = name;
+    }
 }

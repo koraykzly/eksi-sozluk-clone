@@ -28,46 +28,46 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-	@Autowired
-	AuthenticationManager authenticationManager;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
-	@Autowired
-	UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
-	@Autowired
-	PasswordEncoder encoder;
+    @Autowired
+    PasswordEncoder encoder;
 
-	@Autowired
-	JwtUtils jwtUtils;
+    @Autowired
+    JwtUtils jwtUtils;
 
-	@PostMapping("/login")
-	public ResponseEntity<JwtPair> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    @PostMapping("/login")
+    public ResponseEntity<JwtPair> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		JwtPair jwt = jwtUtils.generateJwtPair(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        JwtPair jwt = jwtUtils.generateJwtPair(authentication);
 
-		return ResponseEntity.ok(jwt);
-	}
+        return ResponseEntity.ok(jwt);
+    }
 
-	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity.badRequest().body(new ErrorMessage("Error: Username is already taken!"));
-		}
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity.badRequest().body(new ErrorMessage("Error: Username is already taken!"));
+        }
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-			return ResponseEntity.badRequest().body(new ErrorMessage("Error: Email is already in use!"));
-		}
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity.badRequest().body(new ErrorMessage("Error: Email is already in use!"));
+        }
 
-		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
-				encoder.encode(signUpRequest.getPassword()), signUpRequest.getBirthday(), signUpRequest.getGender(),
-				ERole.NAIVE);
-		userRepository.save(user);
+        User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
+                encoder.encode(signUpRequest.getPassword()), signUpRequest.getBirthday(), signUpRequest.getGender(),
+                ERole.NAIVE);
+        userRepository.save(user);
 
-		return ResponseEntity.ok(new ErrorMessage("User registered successfully!"));
-	}
+        return ResponseEntity.ok(new ErrorMessage("User registered successfully!"));
+    }
 
 }
