@@ -33,4 +33,6 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
     List<ITopic> getPopularTopics(int lastNTopic);
     
     Optional<Topic> findById(Long id);
+    
+    Optional<Topic> findByTitle(String title);
 }

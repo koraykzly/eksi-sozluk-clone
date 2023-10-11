@@ -27,9 +27,8 @@ public class EntryController {
     @Autowired
     private EntryService entryService;
 
-    @PostMapping(value = "/{id}")
-    public EntryDto getPopularTopics(
-            @PathVariable int id,
+    @PostMapping(value = "/")
+    public EntryDto insertEntry(
             @Valid @RequestBody EntryRequest requestBody) {
 
         Authentication authentication = SecurityContextHolder

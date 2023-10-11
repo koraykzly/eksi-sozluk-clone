@@ -54,6 +54,7 @@ public class BasicAuthSecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/topics/tags").permitAll()
                         .requestMatchers("/api/topics/popular").permitAll()
                         .anyRequest().authenticated());
 

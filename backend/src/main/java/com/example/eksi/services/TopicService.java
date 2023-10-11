@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.eksi.domain.Tag;
+import com.example.eksi.repositories.TagRepository;
 import com.example.eksi.repositories.TopicRepository;
 import com.example.eksi.repositories.projections.ITopic;
 
@@ -13,6 +15,9 @@ public class TopicService {
 
     @Autowired
     TopicRepository topicRepository;
+
+    @Autowired
+    TagRepository tagRepository;
 
     // bugün
     public List<ITopic> getTodayTopics(int lastNTopic) {
@@ -30,5 +35,9 @@ public class TopicService {
 
     public List<ITopic> searchTopics() {
         return null;
+    }
+
+    public List<Tag> getTopicTags() {
+        return tagRepository.findAll();
     }
 }

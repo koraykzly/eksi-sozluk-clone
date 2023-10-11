@@ -45,8 +45,6 @@ public class UserController {
     @GetMapping("/{username}/favorites")
     public ResponseEntity<List<IEntryFavorited>> getUserFavoriteEntries(@PathVariable String username) {
         List<IEntryFavorited> entries = userService.getUserFavoriteEntries(username);
-        IEntryFavorited dto = entries.get(0);
-        System.out.println(dto.getContent());
         return ResponseEntity.ok(entries);
     }
 

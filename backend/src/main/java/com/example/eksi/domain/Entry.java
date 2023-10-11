@@ -32,6 +32,8 @@ public class Entry {
     @NotNull
     private LocalDateTime dateTime;
 
+    private LocalDateTime lastEdited;
+
     @NotNull
     private boolean isIncludeLink;
 
@@ -68,6 +70,10 @@ public class Entry {
         this.downvoted = 0;
         this.favCount = 0;
         this.writtenByRole = user.getRole();
+    }
+
+    public Entry() {
+        super();
     }
 
     public Long getId() {
@@ -149,4 +155,13 @@ public class Entry {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public LocalDateTime getLastEdited() {
+        return lastEdited;
+    }
+
+    public void setLastEdited(LocalDateTime lastEdited) {
+        this.lastEdited = lastEdited;
+    }
+
 }

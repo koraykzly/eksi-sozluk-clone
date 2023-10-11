@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.eksi.controllers.EntryController;
 import com.example.eksi.domain.Entry;
 import com.example.eksi.domain.Topic;
 import com.example.eksi.domain.User;
@@ -17,6 +16,8 @@ import com.example.eksi.payload.response.EntryDto;
 import com.example.eksi.repositories.EntryRepository;
 import com.example.eksi.repositories.TopicRepository;
 import com.example.eksi.repositories.UserRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class EntryService {
@@ -39,10 +40,11 @@ public class EntryService {
         return null;
     }
 
-    public List<Topic> searchInEntries(Long topic_id) {
+    public List<Topic> searchInEntries(String keyword) {
         return null;
     }
 
+    // add entry to topic already exists
     public EntryDto addEntry(String content, Long topicId, Long userId) {
 
         boolean isIncludeLink = checkContentIncludeLink(content);
@@ -54,8 +56,31 @@ public class EntryService {
                 () -> new NotFoundException("User not found"));
 
         Entry entry = entryRepository.save(new Entry(content, isIncludeLink, topic, user));
-        EntryDto dto = modelMapper.map(entry, EntryDto.class);
-        return dto;
+        EntryDto entryDto = modelMapper.map(entry, EntryDto.class); 
+        entryDto.setTitle(topic.getTitle());
+        return entryDto;
+    }
+
+    @Transactional
+    public EntryDto addEntry(String content, String topicTitle, Long userId) {
+
+        Topic topic = topicRepository.findByTitle(topicTitle).orElse(null);
+        if (topic != null) {
+            return addEntry(content, topic.getId(), userId);
+        }
+
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException("User not found"));
+
+        topic = new Topic(topicTitle, user);
+        topic = topicRepository.save(topic);
+
+        boolean isIncludeLink = checkContentIncludeLink(content);
+
+        Entry entry = entryRepository.save(new Entry(content, isIncludeLink, topic, user));
+        EntryDto entryDto = modelMapper.map(entry, EntryDto.class); 
+        entryDto.setTitle(topic.getTitle());
+        return entryDto;
 
     }
 

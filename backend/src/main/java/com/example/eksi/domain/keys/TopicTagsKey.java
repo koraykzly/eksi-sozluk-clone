@@ -12,7 +12,7 @@ public class TopicTagsKey implements Serializable {
     private static final long serialVersionUID = 1224014275776556246L;
 
     @Column(name = "tag_id")
-    short tagId;
+    int tagId;
 
     @Column(name = "topic_id")
     Long topicId;
@@ -27,11 +27,11 @@ public class TopicTagsKey implements Serializable {
         this.topicId = topicId;
     }
 
-    public short getTagId() {
+    public int getTagId() {
         return tagId;
     }
 
-    public void setTagId(short tagId) {
+    public void setTagId(int tagId) {
         this.tagId = tagId;
     }
 
