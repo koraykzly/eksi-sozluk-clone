@@ -1,8 +1,10 @@
-package com.example.eksi.payload.response;
+package com.example.eksi.repositories.projections;
 
 import java.time.LocalDateTime;
 
-public interface EntryFavoritedDto {
+public interface IEntryFavorited {
+    public Long getId();
+
     public String getContent();
 
     public String getTitle();

@@ -7,7 +7,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ import com.example.eksi.payload.response.ErrorMessage;
 import com.example.eksi.payload.response.JwtPair;
 import com.example.eksi.repositories.UserRepository;
 import com.example.eksi.security.jwt.JwtUtils;
-import com.example.eksi.security.services.UserDetailsImpl;
 
 import jakarta.validation.Valid;
 
@@ -52,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<ErrorMessage> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest().body(new ErrorMessage("Error: Username is already taken!"));

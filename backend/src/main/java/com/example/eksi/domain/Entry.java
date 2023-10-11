@@ -58,6 +58,18 @@ public class Entry {
         this.dateTime = LocalDateTime.now();
     }
 
+    public Entry(@Size(min = 1, max = 51200) String content, @NotNull boolean isIncludeLink, Topic topic, User user) {
+        super();
+        this.content = content;
+        this.isIncludeLink = isIncludeLink;
+        this.topic = topic;
+        this.user = user;
+        this.upvoted = 0;
+        this.downvoted = 0;
+        this.favCount = 0;
+        this.writtenByRole = user.getRole();
+    }
+
     public Long getId() {
         return id;
     }

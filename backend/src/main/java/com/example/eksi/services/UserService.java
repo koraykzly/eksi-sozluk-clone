@@ -6,17 +6,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.eksi.domain.Entry;
 import com.example.eksi.domain.FollowedUsers;
 import com.example.eksi.domain.User;
-import com.example.eksi.exceptions.UserNotFoundException;
-import com.example.eksi.payload.response.EntryDto;
-import com.example.eksi.payload.response.EntryFavoritedDto;
+import com.example.eksi.exceptions.NotFoundException;
 import com.example.eksi.payload.response.UserBasicDto;
 import com.example.eksi.repositories.EntryRepository;
 import com.example.eksi.repositories.FavoriteEntriesRepository;
 import com.example.eksi.repositories.FollowedUsersRepository;
 import com.example.eksi.repositories.UserRepository;
+import com.example.eksi.repositories.projections.IEntry;
+import com.example.eksi.repositories.projections.IEntryFavorited;
 
 @Service
 public class UserService {
@@ -41,16 +40,11 @@ public class UserService {
         return modelMapper.map(user, UserBasicDto.class);
     }
 
-    public List<EntryDto> getUserEntries(String username) {
-        User user = getUser(username);
-        List<Entry> entries = entryRepository.findByUser(user);
-
-        return entries.stream()
-                .map(entry -> modelMapper.map(entry, EntryDto.class))
-                .toList();
+    public List<IEntry> getUserEntries(String username) {
+        return entryRepository.findAllByUsername(username);
     }
 
-    public List<EntryFavoritedDto> getUserFavoriteEntries(String username) {
+    public List<IEntryFavorited> getUserFavoriteEntries(String username) {
         return favoriteEntriesRepository
                 .findAllByUserUsername(username);
     }
@@ -75,7 +69,7 @@ public class UserService {
 
     public User getUser(String username) {
         return userRepository.findByUsername(username).orElseThrow(
-                () -> new UserNotFoundException(username + " not found"));
+                () -> new NotFoundException(username + " not found"));
     }
 
 }

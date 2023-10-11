@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.eksi.payload.response.EntryDto;
-import com.example.eksi.payload.response.EntryFavoritedDto;
 import com.example.eksi.payload.response.UserBasicDto;
+import com.example.eksi.repositories.projections.IEntry;
+import com.example.eksi.repositories.projections.IEntryFavorited;
 import com.example.eksi.services.UserService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -31,8 +31,8 @@ public class UserController {
     }
 
     @GetMapping("/{username}/entries")
-    public ResponseEntity<List<EntryDto>> getUserEntries(@PathVariable String username) {
-        List<EntryDto> entries = userService.getUserEntries(username);
+    public ResponseEntity<List<IEntry>> getUserEntries(@PathVariable String username) {
+        List<IEntry> entries = userService.getUserEntries(username);
         return ResponseEntity.ok(entries);
     }
 
@@ -41,11 +41,11 @@ public class UserController {
         List<String> list = userService.getUserFollowers(username);
         return ResponseEntity.ok(list);
     }
-    
+
     @GetMapping("/{username}/favorites")
-    public ResponseEntity<List<EntryFavoritedDto>> getUserFavoriteEntries(@PathVariable String username) {
-        List<EntryFavoritedDto> entries = userService.getUserFavoriteEntries(username);
-        EntryFavoritedDto dto = entries.get(0);
+    public ResponseEntity<List<IEntryFavorited>> getUserFavoriteEntries(@PathVariable String username) {
+        List<IEntryFavorited> entries = userService.getUserFavoriteEntries(username);
+        IEntryFavorited dto = entries.get(0);
         System.out.println(dto.getContent());
         return ResponseEntity.ok(entries);
     }

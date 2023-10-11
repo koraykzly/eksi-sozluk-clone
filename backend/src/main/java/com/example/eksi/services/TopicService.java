@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.eksi.domain.Topic;
 import com.example.eksi.repositories.TopicRepository;
+import com.example.eksi.repositories.projections.ITopic;
 
 @Service
 public class TopicService {
@@ -15,16 +15,20 @@ public class TopicService {
     TopicRepository topicRepository;
 
     // bugün
-    public List<Topic> getTodayTopics() {
-        return null;
+    public List<ITopic> getTodayTopics(int lastNTopic) {
+        return topicRepository.getTodayTopics(lastNTopic);
+    }
+
+    public List<ITopic> getTodayTopics() {
+        return topicRepository.getTodayTopics(100);
     }
 
     // gündem
-    public List<Topic> getPopularTopics() {
-        return null;
+    public List<ITopic> getPopularTopics() {
+        return topicRepository.getPopularTopics(100);
     }
 
-    public List<Topic> searchTopics() {
+    public List<ITopic> searchTopics() {
         return null;
     }
 }

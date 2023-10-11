@@ -15,7 +15,7 @@ public class RedisService {
     }
 
     public Object getValue(String key) {
-        return (Object) redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForValue().get(key);
     }
 
 }

@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.example.eksi.domain.EntryFavorited;
 import com.example.eksi.domain.keys.FavoriteEntriesKey;
-import com.example.eksi.payload.response.EntryFavoritedDto;
+import com.example.eksi.repositories.projections.IEntryFavorited;
 
 public interface FavoriteEntriesRepository extends JpaRepository<EntryFavorited, FavoriteEntriesKey> {
 
     @Query("""
             SELECT 
+                e.id id,
                 e.content content, 
                 t.title title,
                 u.username username,
@@ -25,6 +26,6 @@ public interface FavoriteEntriesRepository extends JpaRepository<EntryFavorited,
             LEFT JOIN e.user u
             WHERE uf.username = :username
             """)
-    List<EntryFavoritedDto> findAllByUserUsername(String username);
+    List<IEntryFavorited> findAllByUserUsername(String username);
 
 }
