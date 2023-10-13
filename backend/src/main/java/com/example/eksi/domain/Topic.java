@@ -87,4 +87,25 @@ public class Topic {
         this.title = title;
     }
 
+    public LocalDateTime getLastEntered() {
+        return lastEntered;
+    }
+
+    public void setLastEntered(LocalDateTime lastEntered) {
+        this.lastEntered = lastEntered;
+    }
+
+    public int getEntryCountSinceMidnight() {
+        return entryCountSinceMidnight;
+    }
+
+    public void setEntryCountSinceMidnight(int entryCountSinceMidnight) {
+        this.entryCountSinceMidnight = entryCountSinceMidnight;
+    }
+
+    public int increaseEntryCountSinceMidnight() {
+        this.entryCountSinceMidnight++;
+        return this.entryCountSinceMidnight;
+    }
+
 }

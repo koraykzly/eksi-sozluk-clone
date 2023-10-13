@@ -24,6 +24,5 @@ public class InsertTopicRequest {
     public void setTopicTitle(String topicTitle) {
         this.topicTitle = topicTitle;
     }
-    
-    
+
 }

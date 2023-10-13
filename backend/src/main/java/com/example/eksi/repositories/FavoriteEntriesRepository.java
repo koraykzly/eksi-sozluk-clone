@@ -27,5 +27,6 @@ public interface FavoriteEntriesRepository extends JpaRepository<EntryFavorited,
             WHERE uf.username = :username
             """)
     List<IEntryFavorited> findAllByUserUsername(String username);
-
+    
+//    EntryFavorited save(FavoriteEntriesKey entity);
 }

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.eksi.payload.request.EntryRequest;
 import com.example.eksi.payload.response.EntryDto;
+import com.example.eksi.repositories.projections.IEntry;
 import com.example.eksi.security.services.UserDetailsImpl;
 import com.example.eksi.services.EntryService;
 
@@ -37,5 +39,21 @@ public class EntryController {
         return entryService.addEntry(
                 requestBody.getContent(), requestBody.getTopicId(), user.getId());
     }
+
+    @GetMapping(value = "/{entryId}")
+    public EntryDto getEntry(@PathVariable Long entryId) {
+        return entryService.getEntry(entryId);
+    }
+
+    @PostMapping(value = "/favorities/{entryId}")
+    public IEntry addEntryToFavorite(@PathVariable Long entryId) {
+        Authentication authentication = SecurityContextHolder
+                .getContext().getAuthentication();
+        UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+
+        return entryService.addEntryToFavorities(user.getId(), entryId);
+
+    }
+
 
 }

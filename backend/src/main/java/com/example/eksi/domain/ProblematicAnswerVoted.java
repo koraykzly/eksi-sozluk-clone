@@ -1,12 +1,11 @@
 package com.example.eksi.domain;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.example.eksi.domain.enums.EVote;
+import com.example.eksi.domain.keys.ProblematicAnswerVotedKey;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -44,19 +43,4 @@ public class ProblematicAnswerVoted {
     public void prePersist() {
         this.datetime = LocalDateTime.now();
     }
-}
-
-@Embeddable
-class ProblematicAnswerVotedKey implements Serializable {
-
-    private static final long serialVersionUID = 3108748429405574981L;
-
-    @Column(name = "user_id")
-    Long userId;
-
-    @Column(name = "problematic_id")
-    Long problematicId;
-
-    // standard constructors, getters, and setters
-    // hashcode and equals implementation
 }

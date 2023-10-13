@@ -3,6 +3,7 @@ package com.example.eksi.payload.response;
 import java.time.LocalDateTime;
 
 public class EntryDto {
+    Long id;
     private String content;
     private String title;
     private int upvoted;
