@@ -1,0 +1,42 @@
+{
+  "name": "eksi-sozluk-clone",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "dependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0",
+    "react-scripts": "5.0.1",
+    "react-copy-to-clipboard": "5.1.0",
+    "react-datetime": "3.2.0",
+    "react-router-dom": "6.11.1"
+  },
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  },
+  "optionalDependencies": {
+    "eslint-plugin-flowtype": "8.0.3",
+    "typescript": "5.0.4"
+  },
+  "overrides": {
+    "svgo": "3.0.2",
+    "fsevents": "2.3.2",
+    "chokidar": "3.5.3"
+  }
+}
