@@ -1,10 +1,13 @@
-import "../css/Global.css";
+import "assets/css/Global.css";
+import { Link } from "react-router-dom";
 
 const Logo = () => {
   return (
     <>
       <div className="logo-container">
-        <img src="https://ekstat.com/img/new-design/eksisozluk_logo_darktheme.svg"></img>
+        <Link to="/">
+          <img src="https://ekstat.com/img/new-design/eksisozluk_logo_darktheme.svg" />
+        </Link>
       </div>
     </>
   );

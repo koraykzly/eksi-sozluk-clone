@@ -276,6 +276,11 @@ textarea {
   -ms-word-wrap: break-word;
   word-wrap: break-word;
 }
+.partial-left-side ul li a:hover {
+  text-decoration: none;
+  font-style: normal;
+}
+
 
 .partial-left-side {
   position: absolute;
@@ -509,4 +514,11 @@ textarea {
 a:hover {
   text-decoration: underline;
   color: inherit;
+}
+
+.not-underlined {
+  text-decoration: none !important;
+}
+.not-underlined:hover {
+  text-decoration: none !important;
 }

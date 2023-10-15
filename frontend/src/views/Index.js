@@ -1,21 +1,12 @@
-import Header from "components/Headers/Header";
-import LeftSide from "components/Sidebar/LeftSide";
-import Section from "components/Section";
+import "assets/css/Global.css";
+import NotImplementedYet from "components/NotImplementedYet";
 
-import "components/css/Global.css";
-
-const Index = (props) => {
+const Index = () => {
   return (
-    <>
-        <Header />
-        <main className="main-container">
-          <LeftSide/>
-          <div className="inner-content">
-            <Section/>
-          </div>
-        </main>
-    </>
-  );
+    <NotImplementedYet>
+      Fill with random entries
+    </NotImplementedYet>
+  )
 };
 
 export default Index;

@@ -1,14 +1,46 @@
 import Entry from "./Entry";
+import { useState, useEffect } from "react";
 import EntryContainer from "./EntryContainer";
-import "./css/Global.css";
+import "assets/css/Global.css";
+import { getEntriesByTopicIdApi } from "api/ApiService";
+import { useNavigate, useParams } from "react-router-dom";
 
-const Section = () => {
+const EntrySection = () => {
+  const { topicId } = useParams();
+
+  const [data, setData] = useState([]);
+  const [title, setTitle] = useState("");
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    getEntriesByTopicIdApi(topicId)
+      .then((response) => {
+        console.log(response.data);
+        setData(response.data.entries);
+        setTitle(response.data.title);
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          // handlee later
+          setError(true);
+        }
+      });
+
+    return () => {
+      setError(false);
+    };
+  }, [topicId]);
+
+  if (error) {
+    return <>Error</>;
+  }
+
   return (
     <>
       <div className="section">
         <div className="topic">
           <h1>
-            <a>14 ekim 2023</a>
+            <a>{title}</a>
           </h1>
 
           {/* subtitle menu */}
@@ -39,10 +71,9 @@ const Section = () => {
           </div>
 
           <EntryContainer>
-            <Entry />
-            <Entry />
-            <Entry />
-            <Entry />
+            {data.map((item, index) => {
+              return <Entry key={index} data={item} />;
+            })}
           </EntryContainer>
         </div>
       </div>
@@ -50,4 +81,4 @@ const Section = () => {
   );
 };
 
-export default Section;
+export default EntrySection;

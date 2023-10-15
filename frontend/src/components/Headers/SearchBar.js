@@ -1,4 +1,4 @@
-import "../css/Global.css";
+import "assets/css/Global.css";
 
 const SearchBar = () => {
   return (

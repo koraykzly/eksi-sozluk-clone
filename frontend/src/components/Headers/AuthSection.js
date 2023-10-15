@@ -1,4 +1,5 @@
-import "../css/Global.css";
+import "assets/css/Global.css";
+import { Link } from "react-router-dom";
 
 const AuthSection = () => {
   return (
@@ -6,16 +7,11 @@ const AuthSection = () => {
       <div className="auth-container">
         <ul className="list">
           <li>
-            <a>ben</a>
+            <Link to="/login">giris</Link>
           </li>
           <li>
-            <a>mesaj</a>
+          <Link to="/register">kayıt ol</Link>
           </li>
-          <li>
-            <a className="events">olay</a>
-          </li>
-          <li>
-            <a>...</a></li>
         </ul>
       </div>
     </>
