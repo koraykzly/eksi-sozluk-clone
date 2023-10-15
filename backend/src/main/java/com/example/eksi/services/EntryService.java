@@ -17,11 +17,14 @@ import com.example.eksi.domain.User;
 import com.example.eksi.domain.keys.FavoriteEntriesKey;
 import com.example.eksi.exceptions.NotFoundException;
 import com.example.eksi.payload.response.EntryDto;
+import com.example.eksi.payload.response.EntryDtoForTopic;
+import com.example.eksi.payload.response.TopicEntries;
 import com.example.eksi.repositories.EntryRepository;
 import com.example.eksi.repositories.FavoriteEntriesRepository;
 import com.example.eksi.repositories.TopicRepository;
 import com.example.eksi.repositories.UserRepository;
 import com.example.eksi.repositories.projections.IEntry;
+import com.example.eksi.repositories.projections.IEntrySingle;
 
 import jakarta.transaction.Transactional;
 
@@ -131,6 +134,27 @@ public class EntryService {
         favoriteEntriesRepository.save(favoritedEntry);
 
         return entryRepository.findByIdWithTopicTitle(entryId).orElse(null);
+    }
+
+    public TopicEntries getEntriesByTopicId(Long topicId) {
+        Topic topic = topicRepository.findById(topicId).orElseThrow(
+                () -> new NotFoundException("Topic not found"));
+        
+        List<IEntrySingle> entries = entryRepository.findAllByTopicId(topicId);
+        
+        List<EntryDtoForTopic> dtos = entries.stream().map(ientry -> {
+            EntryDtoForTopic dto = new EntryDtoForTopic();
+            dto.setContent(ientry.getContent());
+            dto.setUsername(ientry.getUsername());
+            dto.setDateTime(ientry.getDateTime());
+            dto.setFavCount(ientry.getFavCount());
+            dto.setId(ientry.getId());
+            return dto;
+        }).toList();
+
+        return new TopicEntries(topic.getId(), topic.getTitle(), dtos);
+        
+
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.eksi.domain.Tag;
 import com.example.eksi.payload.request.InsertTopicRequest;
 import com.example.eksi.payload.response.EntryDto;
+import com.example.eksi.payload.response.TopicEntries;
 import com.example.eksi.repositories.projections.ITopic;
 import com.example.eksi.security.services.UserDetailsImpl;
 import com.example.eksi.services.EntryService;
@@ -56,6 +58,12 @@ public class TopicController {
                 requestBody.getEntryContent(),
                 requestBody.getTopicTitle(),
                 user.getId());
+
+    }
+
+    @PostMapping(value = "id/{topicId}")
+    public TopicEntries getEntriesByTopicId(@PathVariable Long topicId) {
+        return entryService.getEntriesByTopicId(topicId);
 
     }
 
