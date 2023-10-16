@@ -3,15 +3,13 @@ import { useState } from "react";
 // import apiClient from "api/apiClient";
 import { getPopularTopicsApi, getTodayTopicsApi } from "api/ApiService";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import Topic from "./Topic";
 
 // type: bugün, gündem
-const TopicSection = ({ type, selectTopic }) => {
-  // if (type === undefined) {
-  //   type = "bugün";
-  // }
-
+const TopicSection = ({ type }) => {
   const [data, setData] = useState([]);
+
+  
 
   useEffect(() => {
     if (type === "bugün") {
@@ -26,11 +24,16 @@ const TopicSection = ({ type, selectTopic }) => {
     }
   }, []);
 
+  let title = type;
+  if(type === "debe") {
+    title = "dünün en beğenilen entry'leri"
+  }
+
   return (
     <div className="left-side">
       <nav className="partial-left-side">
         <div className="left-side-title">
-          <h2>{type}</h2>
+          <h2>{title}</h2>
         </div>
 
         {type === "bugün" ? (
@@ -41,13 +44,7 @@ const TopicSection = ({ type, selectTopic }) => {
 
         <ul>
           {data.map((item, index) => {
-            return (
-              <Link to={`${item.id}`} className="not-underlined">
-                <li key={index}>
-                  <a className="not-underlined">{item.title}</a>
-                </li>
-              </Link>
-            );
+            return <Topic id={item.id} title={item.title} key={index} />;
           })}
         </ul>
       </nav>

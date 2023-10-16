@@ -20,22 +20,22 @@ import EntrySection from "components/EntrySection";
 
 const App = () => {
   const auth = useAuth();
-
+  
   const [tag, selectTag] = useState("gündem");
-  const [topic, selectTopic] = useState(1);
+  // const [topic, selectTopic] = useState(1);
 
   return (
     <AuthProvider>
       <BrowserRouter>
         <Header isAuthenticated={!auth.isAuthenticated} selectTag={selectTag} />
         <main className="main-container">
-          <TopicSection type={tag} selectTopic={selectTopic} />
+          <TopicSection type={tag} />
           <div className="inner-content">
             <Routes>
-              <Route path="/" element={<Index topicId={topic} />} exact />
+              <Route path="/" element={<Index />} exact />
               <Route
                 path="/:topicId"
-                element={<EntrySection topicId={topic} />}
+                element={<EntrySection />}
               />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

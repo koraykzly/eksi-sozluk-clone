@@ -6,7 +6,7 @@ const Logo = () => {
     <>
       <div className="logo-container">
         <Link to="/">
-          <img src="https://ekstat.com/img/new-design/eksisozluk_logo_darktheme.svg" />
+          {/* <img src="https://ekstat.com/img/new-design/eksisozluk_logo_darktheme.svg" /> */}
         </Link>
       </div>
     </>

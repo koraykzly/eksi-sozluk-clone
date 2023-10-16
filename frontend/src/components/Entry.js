@@ -2,6 +2,16 @@ import DownVote from "./TempIcons/DownVote";
 import Favorite from "./TempIcons/Favorite";
 import UpVote from "./TempIcons/UpVote";
 
+function formatDate(inputDate) {
+  const date = new Date(inputDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}.${month}.${day} ${hours}:${minutes}`;
+}
+
 const Entry = ({ data }) => {
   // temp data
   if (data == null) {
@@ -40,7 +50,7 @@ const Entry = ({ data }) => {
 
         <div className="user-info">
           <a className="username-info">{data.username}</a>
-          <a className="user-datetime">{data.datetime}</a>
+          <a className="user-datetime">{formatDate(data.dateTime)}</a>
         </div>
       </div>
     </li>

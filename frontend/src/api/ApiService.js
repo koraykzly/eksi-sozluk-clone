@@ -78,6 +78,6 @@ export const insertTopicApi = (entryContent, topicTitle) => {
     });
 };
 
-export const getEntriesByTopicIdApi = (topicId) => {
-    return apiClient.post(`/api/topics/id/${topicId}`);
+export const getEntriesByTopicIdApi = (topicId, page = 0) => {
+    return apiClient.get(`/api/topics/id/${topicId}?page=${page}`);
 };

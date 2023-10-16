@@ -3,20 +3,30 @@ import { useState, useEffect } from "react";
 import EntryContainer from "./EntryContainer";
 import "assets/css/Global.css";
 import { getEntriesByTopicIdApi } from "api/ApiService";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import Pager from "./Pager";
 
 const EntrySection = () => {
   const { topicId } = useParams();
+  
+  // const location = useLocation();
+  // const queryParams = new URLSearchParams(location.search);
+  // const _page = queryParams.get('page');
+
+  // if(_page === undefined) {
+  //   _page = 0;
+  // }
 
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [error, setError] = useState(false);
+  // const [page, setPage] = useState(0);
 
   useEffect(() => {
-    getEntriesByTopicIdApi(topicId)
+    getEntriesByTopicIdApi(topicId, 0)
       .then((response) => {
         console.log(response.data);
-        setData(response.data.entries);
+        setData(response.data.entries.content);
         setTitle(response.data.title);
       })
       .catch((err) => {
@@ -60,14 +70,15 @@ const EntrySection = () => {
               </div>
             </div>
 
-            <div className="pager">
+            {/* <div className="pager">
               <select>
                 <option>1</option>
                 <option>2</option>
               </select>
               <a>15</a>
               <a>»</a>
-            </div>
+            </div> */}
+            <Pager currentPage={0} totalPage={10} ></Pager>
           </div>
 
           <EntryContainer>

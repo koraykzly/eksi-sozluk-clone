@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("/src/assets/fonts/SourceSansPro.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   padding-top: 101px;
   font-family: "Source Sans Pro", sans-serif;
@@ -8,6 +15,7 @@ body {
   line-height: 1.618;
   background-color: #2d2d2d;
 }
+
 h1,
 h2,
 h3,
@@ -30,7 +38,10 @@ h2 {
   font-weight: normal;
   color: #666;
 }
-
+div {
+  margin: 0;
+  padding: 0;
+}
 a {
   color: #bdbdbd;
   text-decoration: none;
@@ -77,6 +88,9 @@ textarea {
   width: 1240px;
   margin: 0 auto;
   position: relative;
+  padding: 0;
+  border: 0;
+  /* background-color: yellow; */
 }
 .bottom-bar {
   overflow: visible;
@@ -123,19 +137,21 @@ textarea {
   width: 245px;
   max-height: 29px;
   /* background-color: red; */
-  height: 60px;
+  /* height: 60px; */
 }
 
-.logo-container img {
+.logo-container a {
   display: block;
   margin: 0;
-  margin-top: 18px;
+  /* margin-top: 18px; */
   padding: 0;
-  height: 22px;
+  height: 60px;
+  line-height: 60px;
   background-position: 10px 50%;
   background-size: 129px 40px;
   background-repeat: no-repeat;
   text-indent: -119988px;
+  background-image: url("https://ekstat.com/img/new-design/eksisozluk_logo_darktheme.svg");
 }
 
 .search-container {
@@ -157,7 +173,7 @@ textarea {
   padding-left: 10px;
   /* display: inline-block; */
   float: left;
-  /* font-size: 14px; */
+  font-size: 14px;
   border: 1px solid #81c14b;
   border-radius: 5px 0 0 5px;
   height: 29px;
@@ -168,7 +184,7 @@ textarea {
   width: 480px;
   color: black;
   max-width: 73%;
-  /* padding: 8px 8px; */
+  padding: 8px 8px;
   box-sizing: border-box;
 }
 
@@ -187,28 +203,33 @@ textarea {
 
 .search-container .search-input:focus {
   outline: none;
+}
 
+.clear {
+  clear: both;
 }
 
 .nav {
   display: flex;
-  margin-top: 30px;
-
-  flex-grow: 1;
-  flex-shrink: 1;
-  border-color: green;
+  /* margin-top: 30px; */
+  /* background-color: red; */
+  /* flex-grow: 1;
+  flex-shrink: 1; */
+  /* border-color: green; */
+  font-weight: 600;
 
   /* background-color: aqua; */
 }
 .nav ul {
   list-style: none;
-  /* line-height: 36; */
+  height: 41px;
+  line-height: 36px;
   display: flex;
-  /* margin-left: -6px; */
+  margin-left: -6px;
   flex-basis: 85%;
   flex-grow: 1;
   flex-shrink: 1;
-  margin: 0;
+  margin: 0 auto;
   width: 100%;
 }
 
@@ -281,7 +302,6 @@ textarea {
   font-style: normal;
 }
 
-
 .partial-left-side {
   position: absolute;
   bottom: 0;
@@ -293,6 +313,25 @@ textarea {
   padding-right: 10px;
   padding-bottom: 20px;
 }
+
+.partial-left-side::-webkit-scrollbar-thumb {
+  background-color: #202020;
+  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.1), inset 0 -1px 0 rgba(0,0,0,0.07);
+  border-radius: 4px;
+}
+
+.partial-left-side::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+.partial-left-side::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+.partial-left-side::-webkit-scrollbar {
+  width: 8px;
+}
+
 
 /* main container */
 
@@ -318,16 +357,32 @@ textarea {
 }
 
 .external-site {
-  /* flex-basis: 0;
+  flex-basis: 0;
   flex-grow: 1;
-  flex-shrink: 1; */
+  flex-shrink: 1;
   overflow: visible;
   width: auto;
   padding: 0 10px;
 }
 
-.external-site img {
+.external-site a {
   height: 20px;
+  display: block;
+  padding: 0;
+  margin: 0;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.external-site .logo-pena {
+  width: 64px;
+  height: 30px;
+  background-image: url("https://ekstat.com/img/new-logos/pena-text-logo-dark@2x.png");
+}
+.external-site .logo-eksi-seyler {
+  width: 90px;
+  height: 30px;
+  background-image: url("https://ekstat.com/img/new-logos/eksiseyler-text-logo-dark@2x.png");
 }
 
 .left-side-title {

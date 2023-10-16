@@ -1,12 +1,15 @@
 import "assets/css/Global.css";
 import { useAuth } from "hooks/useAuth";
 import { NAV_TAGS } from "constants/tags";
+import { Link } from "react-router-dom";
 
 const BottomNavigation = ({ isAuthenticated, selectTag }) => {
 
   console.log('render BottomNavigation',)
 
   return (
+    <>
+    <div className="clear"></div>
     <nav className="nav">
       <ul>
         {isAuthenticated ? <li onClick={() => selectTag('bugün')}>bugün</li> : null}
@@ -31,13 +34,16 @@ const BottomNavigation = ({ isAuthenticated, selectTag }) => {
       </ul>
       <div className="right-nav">
         <div className="external-site">
-          <img src="https://ekstat.com/img/new-logos/pena-text-logo-dark@2x.png"></img>
+          <Link className="logo-pena"></Link>
+          {/* <img src="https://ekstat.com/img/new-logos/pena-text-logo-dark@2x.png"></img> */}
         </div>
         <div className="external-site">
-          <img src="https://ekstat.com/img/new-logos/eksiseyler-text-logo-dark@2x.png"></img>
+          <Link className="logo-eksi-seyler"></Link>
+          {/* <img src="https://ekstat.com/img/new-logos/eksiseyler-text-logo-dark@2x.png"></img> */}
         </div>
       </div>
     </nav>
+    </>
   );
 };
 
