@@ -17,6 +17,7 @@ import Register from "views/Register";
 
 import TopicSection from "components//TopicSection";
 import EntrySection from "components/EntrySection";
+import Footer from "components/Footer";
 
 const App = () => {
   const auth = useAuth();
@@ -45,6 +46,7 @@ const App = () => {
               <Route path="/entry/:id" element={<Entry />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            <Footer />
           </div>
         </main>
       </BrowserRouter>

@@ -5,30 +5,35 @@ import { Link, generatePath, useNavigate } from "react-router-dom";
 //   nav(`?page=${i}&size=10`);
 // };
 
-const optionGenerator = (to) => {
+const optionGenerator = (to, currentPage) => {
   const list = [];
-  for (let i = 0; i < to; i++) {
-    list.push(<option>{i}</option>);
+  for (let i = 1; i <= to; i++) {
+    list.push(<option selected={i === currentPage}>{i}</option>);
   }
   return list;
 };
 
-const Pager = ({ currentPage, totalPage, onChange }) => {
+const Pager = ({ currentPage, totalPage }) => {
   const nav = useNavigate();
 
-  if (totalPage === undefined) {
-    totalPage = 4;
-  }
+  const handleOptionChange = (event) => {
+    const selectedValue = event.target.value;
+    nav(`?page=${selectedValue}`); // Yönlendirme yapılıyor
+  };
+
   return (
     <div className="pager">
-      <select>
-        {optionGenerator(totalPage, nav)}
-        {/* <option>1</option>
-        <option>2</option> */}
+      {currentPage > 1 ? <Link to={`?page=${currentPage - 1}`}>«</Link> : null}
+
+      <select onChange={handleOptionChange}>
+        {optionGenerator(totalPage, currentPage)}
       </select>
-      {/* <a>{totalPage}</a> */}
-      <Link to={`?page={totalPage}`}>{totalPage}</Link>
-      <a>»</a>
+      /
+      <Link to={`?page=${totalPage}`}>{totalPage}</Link>
+
+      {currentPage !== totalPage ? (
+        <Link to={`?page=${currentPage + 1}`}>»</Link>
+      ) : null}
     </div>
   );
 };

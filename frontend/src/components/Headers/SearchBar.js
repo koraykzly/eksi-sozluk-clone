@@ -5,7 +5,7 @@ const SearchBar = () => {
     <>
       <div className="search-container">
         <input
-          className="search-input"
+          className="search-input not-focus"
           placeholder="başlık, #entry, @yazar"
         ></input>
         <button className="search-button">

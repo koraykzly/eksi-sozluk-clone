@@ -3,31 +3,38 @@ import { useState, useEffect } from "react";
 import EntryContainer from "./EntryContainer";
 import "assets/css/Global.css";
 import { getEntriesByTopicIdApi } from "api/ApiService";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import Pager from "./Pager";
+import SubmitEntrySection from "./SubmitEntrySection";
 
 const EntrySection = () => {
   const { topicId } = useParams();
   
-  // const location = useLocation();
-  // const queryParams = new URLSearchParams(location.search);
-  // const _page = queryParams.get('page');
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const _page = queryParams.get('page');
 
-  // if(_page === undefined) {
-  //   _page = 0;
-  // }
+  let page = _page - 1
+  if(_page === undefined || _page === null) {
+    page = 0;
+  }
+
+
+  console.log("render entry section", page)
 
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [error, setError] = useState(false);
-  // const [page, setPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
 
   useEffect(() => {
-    getEntriesByTopicIdApi(topicId, 0)
+    getEntriesByTopicIdApi(topicId, page)
       .then((response) => {
         console.log(response.data);
         setData(response.data.entries.content);
-        setTitle(response.data.title);
+        setTitle(response.data.title)
+        setTotalPage(response.data.entries.totalPages);
+        window.scrollTo(0, 0);
       })
       .catch((err) => {
         if (err.response.status === 404) {
@@ -39,7 +46,7 @@ const EntrySection = () => {
     return () => {
       setError(false);
     };
-  }, [topicId]);
+  }, [topicId, page]);
 
   if (error) {
     return <>Error</>;
@@ -70,22 +77,19 @@ const EntrySection = () => {
               </div>
             </div>
 
-            {/* <div className="pager">
-              <select>
-                <option>1</option>
-                <option>2</option>
-              </select>
-              <a>15</a>
-              <a>»</a>
-            </div> */}
-            <Pager currentPage={0} totalPage={10} ></Pager>
+            
+            <Pager currentPage={page + 1} totalPage={totalPage} />
           </div>
 
           <EntryContainer>
             {data.map((item, index) => {
-              return <Entry key={index} data={item} />;
+              return <Entry key={index} data={item} />
             })}
           </EntryContainer>
+
+          <Pager currentPage={page + 1} totalPage={totalPage} />
+
+          <SubmitEntrySection title={title}></SubmitEntrySection>
         </div>
       </div>
     </>

@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Topic = ({id, title}) => {
+const Topic = ({ id, title }) => {
   return (
-    <Link to={`${id}`} className="not-underlined">
-      <li>
-        <a className="not-underlined">{title}</a>
-      </li>
-    </Link>
+    <li>
+      <Link to={`${id}`} className="not-underlined">
+        {title}
+      </Link>
+    </li>
   );
 };
 
