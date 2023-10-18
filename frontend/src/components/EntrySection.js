@@ -9,18 +9,17 @@ import SubmitEntrySection from "./SubmitEntrySection";
 
 const EntrySection = () => {
   const { topicId } = useParams();
-  
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const _page = queryParams.get('page');
+  const _page = queryParams.get("page");
 
-  let page = _page - 1
-  if(_page === undefined || _page === null) {
+  let page = _page - 1;
+  if (_page === undefined || _page === null) {
     page = 0;
   }
 
-
-  console.log("render entry section", page)
+  console.log("render entry section", page);
 
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
@@ -32,7 +31,7 @@ const EntrySection = () => {
       .then((response) => {
         console.log(response.data);
         setData(response.data.entries.content);
-        setTitle(response.data.title)
+        setTitle(response.data.title);
         setTotalPage(response.data.entries.totalPages);
         window.scrollTo(0, 0);
       })
@@ -53,46 +52,41 @@ const EntrySection = () => {
   }
 
   return (
-    <>
-      <div className="section">
-        <div className="topic">
-          <h1>
-            <a>{title}</a>
-          </h1>
+    <div className="topic">
+      <h1>
+        <a>{title}</a>
+      </h1>
 
-          {/* subtitle menu */}
-          <div className="subtitle-container">
-            <div className="subtitle-menu">
-              <div className="subtitle-item">
-                <a>şükela</a>
-              </div>
-              <div className="subtitle-item">
-                <a>başlıkta ara</a>
-              </div>
-              <div className="subtitle-item">
-                <a>takip et</a>
-              </div>
-              <div className="subtitle-item">
-                <a>soru sor</a>
-              </div>
-            </div>
-
-            
-            <Pager currentPage={page + 1} totalPage={totalPage} />
+      {/* subtitle menu */}
+      <div className="subtitle-container">
+        <div className="subtitle-menu">
+          <div className="subtitle-item">
+            <a>şükela</a>
           </div>
-
-          <EntryContainer>
-            {data.map((item, index) => {
-              return <Entry key={index} data={item} />
-            })}
-          </EntryContainer>
-
-          <Pager currentPage={page + 1} totalPage={totalPage} />
-
-          <SubmitEntrySection title={title}></SubmitEntrySection>
+          <div className="subtitle-item">
+            <a>başlıkta ara</a>
+          </div>
+          <div className="subtitle-item">
+            <a>takip et</a>
+          </div>
+          <div className="subtitle-item">
+            <a>soru sor</a>
+          </div>
         </div>
+
+        <Pager currentPage={page + 1} totalPage={totalPage} />
       </div>
-    </>
+
+      <EntryContainer>
+        {data.map((item, index) => {
+          return <Entry key={index} data={item} />;
+        })}
+      </EntryContainer>
+
+      <Pager currentPage={page + 1} totalPage={totalPage} />
+
+      <SubmitEntrySection title={title}></SubmitEntrySection>
+    </div>
   );
 };
 

@@ -1,17 +1,20 @@
 import "assets/css/Global.css";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
-// import UserSection from "./UserSection";
 import BottomNavigation from "./BottomNavigation";
 import AuthSection from "./AuthSection";
 import UserSection from "./UserSection";
 
-const Header = ({ isAuthenticated, selectTag }) => {
-  
+const Header = ({ isAuthenticated, selectTag, topicSectionRef, tag }) => {
   let userSection = <UserSection />;
   if (isAuthenticated === undefined || isAuthenticated === false) {
     userSection = <AuthSection />;
   }
+
+  const updateTopicSection = (tag) => {
+    selectTag(tag);
+    topicSectionRef();
+  };
 
   return (
     <>
@@ -20,7 +23,11 @@ const Header = ({ isAuthenticated, selectTag }) => {
           <Logo />
           <SearchBar />
           {userSection}
-          <BottomNavigation isAuthenticated={isAuthenticated} selectTag={selectTag}/>
+          <BottomNavigation
+            tag={tag}
+            isAuthenticated={isAuthenticated}
+            updateTopicSection={updateTopicSection}
+          />
         </div>
       </div>
     </>

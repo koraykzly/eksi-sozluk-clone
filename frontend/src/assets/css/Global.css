@@ -100,6 +100,10 @@ textarea {
   display: flex;
 }
 
+.active-tag {
+  border-bottom: solid 5px #81c14b;
+}
+
 /* AuthSection */
 .list {
   list-style-type: none;
@@ -108,11 +112,47 @@ textarea {
 }
 
 .list li {
-  margin: 5px;
-  padding: 10px;
+  margin: 0;
+  padding: 0;
   /* border: 1px solid #ccc; */
   float: left;
   /* background-color: red; */
+}
+
+.list li a {
+  display: inline-block;
+  padding: 0 10px;
+  height: 29px;
+  line-height: 29px;
+  color: #bdbdbd;
+  box-sizing: border-box;
+  font-weight: 500;
+}
+.auth-icon {
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+  fill: #bdbdbd;
+  display: inline-block;
+  font-size: inherit;
+  vertical-align: middle;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: auto;
+  color: #bdbdbd;
+}
+.svg-dots {
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  fill: #bdbdbd;
+  display: inline-block;
+  font-size: inherit;
+  vertical-align: middle;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: auto;
+  color: #bdbdbd;
 }
 
 .auth-container {
@@ -121,13 +161,22 @@ textarea {
   height: 60px;
   margin: 0;
   /* background-color: chocolate; */
+  line-height: 60px;
 }
 
-.events a {
+.events-highlighted svg {
   font-weight: bold;
+  color: #fff !important;
+  fill: #fff !important;
+}
+.events-highlighted {
   color: #fff !important;
   background-color: #81c14b;
   border-radius: 5px;
+  font-weight: bold;
+}
+.events-highlighted span {
+  font-weight: bold;
 }
 
 .logo-container {

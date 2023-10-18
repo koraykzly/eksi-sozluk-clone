@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import AuthProvider from "context/AuthContext";
 
+import { useRef } from "react";
+
 import Index from "views/Index";
 import User from "views/User";
 import Message from "views/Message";
@@ -21,31 +23,45 @@ import Footer from "components/Footer";
 
 const App = () => {
   const auth = useAuth();
-  
+
   const [tag, selectTag] = useState("gündem");
-  // const [topic, selectTopic] = useState(1);
+  const topicSectionRef = useRef(null);
+
+  const scrollUpTopicSection = () => {
+    if (topicSectionRef.current) {
+      topicSectionRef.current.scrollTop = 0;
+    }
+  };
 
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Header isAuthenticated={!auth.isAuthenticated} selectTag={selectTag} />
+        <Header
+          isAuthenticated={!auth.isAuthenticated}
+          selectTag={selectTag}
+          tag={tag}
+          topicSectionRef={scrollUpTopicSection}
+        />
         <main className="main-container">
-          <TopicSection type={tag} />
+          <TopicSection topicSectionRef={topicSectionRef} type={tag} />
           <div className="inner-content">
-            <Routes>
-              <Route path="/" element={<Index />} exact />
-              <Route
-                path="/:topicId"
-                element={<EntrySection />}
-              />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/user/:username" element={<User />} />
-              <Route path="/message" element={<Message />} />
-              <Route path="/events" element={<Event />} />
-              <Route path="/entry/:id" element={<Entry />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+            <div className="section">
+              <Routes>
+                <Route
+                  path="/"
+                  element={<Index clearTag={() => selectTag("")} />}
+                  exact
+                />
+                <Route path="/:topicId" element={<EntrySection />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/user/:username" element={<User />} />
+                <Route path="/message" element={<Message />} />
+                <Route path="/events" element={<Event />} />
+                <Route path="/entry/:id" element={<Entry />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </div>
             <Footer />
           </div>
         </main>

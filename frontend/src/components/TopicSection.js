@@ -1,15 +1,13 @@
 import "assets/css/Global.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 // import apiClient from "api/apiClient";
 import { getPopularTopicsApi, getTodayTopicsApi } from "api/ApiService";
 import { useEffect } from "react";
 import Topic from "./Topic";
 
 // type: bugün, gündem
-const TopicSection = ({ type }) => {
+const TopicSection = ({ type, topicSectionRef }) => {
   const [data, setData] = useState([]);
-
-  
 
   useEffect(() => {
     if (type === "bugün") {
@@ -25,13 +23,13 @@ const TopicSection = ({ type }) => {
   }, []);
 
   let title = type;
-  if(type === "debe") {
-    title = "dünün en beğenilen entry'leri"
+  if (type === "debe") {
+    title = "dünün en beğenilen entry'leri";
   }
 
   return (
     <div className="left-side">
-      <nav className="partial-left-side">
+      <nav ref={topicSectionRef} className="partial-left-side">
         <div className="left-side-title">
           <h2>{title}</h2>
         </div>

@@ -42,7 +42,7 @@ const Entry = ({ data }) => {
           </span>
           <span className="favorite-section">
             <a>
-              <Favorite color={"#bdbdbd"} />
+              <Favorite style={{height: "15px"}} color={"#bdbdbd"} />
             </a>
             <a>{data.favCount}</a>
           </span>

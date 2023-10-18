@@ -36,6 +36,10 @@ export const registerUserApi = (username, email, password, birthday, gender) => 
     });
 };
 
+export const getRandomEntriesApi = () => {
+    return apiClient.get(`/api/entries/`);
+};
+
 
 // user
 
