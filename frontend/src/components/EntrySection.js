@@ -6,6 +6,7 @@ import { getEntriesByTopicIdApi } from "api/ApiService";
 import { useParams, useLocation } from "react-router-dom";
 import Pager from "./Pager";
 import SubmitEntrySection from "./SubmitEntrySection";
+import TopicSubmenu from "./TopicSubmenu";
 
 const EntrySection = () => {
   const { topicId } = useParams();
@@ -19,7 +20,7 @@ const EntrySection = () => {
     page = 0;
   }
 
-  console.log("render entry section", page);
+  // console.log("render entry section", page);
 
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
@@ -58,21 +59,8 @@ const EntrySection = () => {
       </h1>
 
       {/* subtitle menu */}
-      <div className="subtitle-container">
-        <div className="subtitle-menu">
-          <div className="subtitle-item">
-            <a>şükela</a>
-          </div>
-          <div className="subtitle-item">
-            <a>başlıkta ara</a>
-          </div>
-          <div className="subtitle-item">
-            <a>takip et</a>
-          </div>
-          <div className="subtitle-item">
-            <a>soru sor</a>
-          </div>
-        </div>
+      <div className="submenu-container">
+        <TopicSubmenu />
 
         <Pager currentPage={page + 1} totalPage={totalPage} />
       </div>

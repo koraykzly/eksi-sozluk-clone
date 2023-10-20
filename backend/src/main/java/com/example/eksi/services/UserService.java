@@ -15,7 +15,7 @@ import com.example.eksi.repositories.FavoriteEntriesRepository;
 import com.example.eksi.repositories.FollowedUsersRepository;
 import com.example.eksi.repositories.UserRepository;
 import com.example.eksi.repositories.projections.IEntry;
-import com.example.eksi.repositories.projections.IEntryFavorited;
+
 
 @Service
 public class UserService {
@@ -44,7 +44,7 @@ public class UserService {
         return entryRepository.findAllByUsername(username);
     }
 
-    public List<IEntryFavorited> getUserFavoriteEntries(String username) {
+    public List<IEntry> getUserFavoriteEntries(String username) {
         return favoriteEntriesRepository
                 .findAllByUserUsername(username);
     }

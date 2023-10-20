@@ -60,8 +60,8 @@ public class User {
 
     public User(@NotNull String username, @NotNull String email, @NotNull String password,
             @NotNull LocalDate birthday, EGender gender, ERole role) {
-        this.username = username;
-        this.email = email;
+        this.username = username.toLowerCase();
+        this.email = email.toLowerCase();
         this.password = password;
         this.birthday = birthday;
         this.gender = gender;
@@ -84,7 +84,7 @@ public class User {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username.toLowerCase();
     }
 
     public String getEmail() {
@@ -92,7 +92,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     public String getPassword() {
@@ -139,16 +139,16 @@ public class User {
         return followedCount;
     }
 
-    public void setFollowedCount(int followed_count) {
-        this.followedCount = followed_count;
+    public void setFollowedCount(int followedCount) {
+        this.followedCount = followedCount;
     }
 
-    public int getFolloweCount() {
+    public int getFollowerCount() {
         return followerCount;
     }
 
-    public void setFollowerCount(int follower_count) {
-        this.followerCount = follower_count;
+    public void setFollowerCount(int followerCount) {
+        this.followerCount = followerCount;
     }
 
     public int getEntryCount() {
@@ -164,12 +164,9 @@ public class User {
     }
 
     public void setBiography(String biography) {
-        this.biography = biography;
+        this.biography = biography.toLowerCase();
     }
 
-    public int getFollowerCount() {
-        return followerCount;
-    }
 
     @Override
     public String toString() {

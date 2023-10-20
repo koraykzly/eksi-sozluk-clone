@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const BottomNavigation = ({ isAuthenticated, updateTopicSection, tag }) => {
-  console.log("render BottomNavigation");
+  // console.log("render BottomNavigation");
 
   const isActive = (current) => {
     if (current === tag) {

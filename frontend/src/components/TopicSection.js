@@ -4,28 +4,51 @@ import { useRef, useState } from "react";
 import { getPopularTopicsApi, getTodayTopicsApi } from "api/ApiService";
 import { useEffect } from "react";
 import Topic from "./Topic";
+import { getDebeApi } from "api/ApiService";
+import Debe from "./Debe";
+import ClickableBox from "./ClickableBox";
 
-// type: bugün, gündem
+// type: bugün, gündem, debe
 const TopicSection = ({ type, topicSectionRef }) => {
   const [data, setData] = useState([]);
 
+  const getTodayTopics = () => {
+    getTodayTopicsApi().then((response) => {
+      setData(response.data);
+    });
+  };
+
   useEffect(() => {
     if (type === "bugün") {
-      getTodayTopicsApi().then((response) => {
-        console.log(response.data);
-        setData(response.data);
-      });
+      getTodayTopics();
     } else if (type === "gündem") {
       getPopularTopicsApi().then((response) => {
         setData(response.data);
       });
+    } else if (type === "debe") {
+      getDebeApi().then((response) => {
+        setData(response.data);
+      });
     }
-  }, []);
+  }, [type]);
 
-  let title = type;
+  var title = type;
   if (type === "debe") {
     title = "dünün en beğenilen entry'leri";
   }
+  const renderList = () => {
+    if (type === "debe") {
+      return data.map((item, index) => {
+        return (
+          <Debe entryId={item.entryId} title={item.topicTitle} key={index} />
+        );
+      });
+    } else {
+      return data.map((item, index) => {
+        return <Topic id={item.topicId} title={item.topicTitle} key={index} />;
+      });
+    }
+  };
 
   return (
     <div className="left-side">
@@ -35,16 +58,10 @@ const TopicSection = ({ type, topicSectionRef }) => {
         </div>
 
         {type === "bugün" ? (
-          <div className="left-side-box">
-            <a className="refresh-text">yenile</a>
-          </div>
+          <ClickableBox text={"yenile"} onClick={getTodayTopics} />
         ) : null}
 
-        <ul>
-          {data.map((item, index) => {
-            return <Topic id={item.id} title={item.title} key={index} />;
-          })}
-        </ul>
+        <ul>{renderList()}</ul>
       </nav>
     </div>
   );

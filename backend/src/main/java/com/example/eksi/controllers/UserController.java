@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.eksi.payload.response.UserBasicDto;
 import com.example.eksi.repositories.projections.IEntry;
-import com.example.eksi.repositories.projections.IEntryFavorited;
 import com.example.eksi.services.UserService;
 
 @RestController
@@ -43,8 +42,8 @@ public class UserController {
     }
 
     @GetMapping("/{username}/favorites")
-    public ResponseEntity<List<IEntryFavorited>> getUserFavoriteEntries(@PathVariable String username) {
-        List<IEntryFavorited> entries = userService.getUserFavoriteEntries(username);
+    public ResponseEntity<List<IEntry>> getUserFavoriteEntries(@PathVariable String username) {
+        List<IEntry> entries = userService.getUserFavoriteEntries(username);
         return ResponseEntity.ok(entries);
     }
 

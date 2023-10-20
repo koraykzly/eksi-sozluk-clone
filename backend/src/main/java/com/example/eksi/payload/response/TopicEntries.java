@@ -1,15 +1,15 @@
 package com.example.eksi.payload.response;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+
+import com.example.eksi.repositories.projections.IEntrySingle;
 
 public class TopicEntries {
     private Long id;
     private String title;
-    private List<EntryDtoForTopic> entries;
-    
-    
+    private Page<IEntrySingle> entries;
 
-    public TopicEntries(Long id, String title, List<EntryDtoForTopic> entries) {
+    public TopicEntries(Long id, String title, Page<IEntrySingle> entries) {
         super();
         this.id = id;
         this.title = title;
@@ -32,63 +32,39 @@ public class TopicEntries {
         this.title = title;
     }
 
-    public List<EntryDtoForTopic> getEntries() {
+    public Page<IEntrySingle> getEntries() {
         return entries;
     }
 
-    public void setEntries(List<EntryDtoForTopic> entries) {
+    public void setEntries(Page<IEntrySingle> entries) {
         this.entries = entries;
     }
 
 }
 
 /*
-class EntryDtoT {
-    private Long id;
-    private String content;
-    private String username;
-    private String favCount;
-    private LocalDateTime datetime;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFavCount() {
-        return favCount;
-    }
-
-    public void setFavCount(String favCount) {
-        this.favCount = favCount;
-    }
-
-    public LocalDateTime getDatetime() {
-        return datetime;
-    }
-
-    public void setDatetime(LocalDateTime datetime) {
-        this.datetime = datetime;
-    }
-
-}
-*/
+ * class EntryDtoT { private Long id; private String content; private String
+ * username; private String favCount; private LocalDateTime datetime;
+ * 
+ * public Long getId() { return id; }
+ * 
+ * public void setId(Long id) { this.id = id; }
+ * 
+ * public String getContent() { return content; }
+ * 
+ * public void setContent(String content) { this.content = content; }
+ * 
+ * public String getUsername() { return username; }
+ * 
+ * public void setUsername(String username) { this.username = username; }
+ * 
+ * public String getFavCount() { return favCount; }
+ * 
+ * public void setFavCount(String favCount) { this.favCount = favCount; }
+ * 
+ * public LocalDateTime getDatetime() { return datetime; }
+ * 
+ * public void setDatetime(LocalDateTime datetime) { this.datetime = datetime; }
+ * 
+ * }
+ */

@@ -31,10 +31,6 @@
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0"
   },
-  "optionalDependencies": {
-    "eslint-plugin-flowtype": "8.0.3",
-    "typescript": "5.0.4"
-  },
   "overrides": {
     "svgo": "3.0.2",
     "fsevents": "2.3.2",

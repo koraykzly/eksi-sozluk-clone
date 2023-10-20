@@ -13,6 +13,10 @@ export const getEntryApi = (entryId) => {
     return apiClient.get(`/api/entries/${entryId}`);
 };
 
+export const getDebeApi = () => {
+    return apiClient.get(`/api/entries/d/debe`);
+};
+
 export const addEntryToFavoriteApi = (entryId) => {
     return apiClient.post(`/api/entries/favorities/${entryId}`);
 };

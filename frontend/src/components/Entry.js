@@ -1,6 +1,9 @@
 import DownVote from "./TempIcons/DownVote";
 import Favorite from "./TempIcons/Favorite";
 import UpVote from "./TempIcons/UpVote";
+import Share from "./TempIcons/Share";
+import Dots from "./TempIcons/Dots";
+import { Link } from "react-router-dom";
 
 function formatDate(inputDate) {
   const date = new Date(inputDate);
@@ -14,8 +17,9 @@ function formatDate(inputDate) {
 
 const Entry = ({ data }) => {
   // temp data
-  if (data == null) {
+  if (data === undefined) {
     data = {
+      id: 1,
       content: "lorem ipsum",
       username: "koraykzly",
       datetime: "14.10.2023 20:24",
@@ -29,8 +33,12 @@ const Entry = ({ data }) => {
       <div className="entry-footer">
         <div className="feedback-container">
           <div className="feedback">
-            <a>Share</a>
-            <a>...</a>
+            <a>
+              <Share />
+            </a>
+            <a>
+              <Dots />
+            </a>
           </div>
           <span className="vote-section">
             <a>
@@ -42,15 +50,19 @@ const Entry = ({ data }) => {
           </span>
           <span className="favorite-section">
             <a>
-              <Favorite style={{height: "15px"}} color={"#bdbdbd"} />
+              <Favorite />
             </a>
             <a>{data.favCount}</a>
           </span>
         </div>
 
         <div className="user-info">
-          <a className="username-info">{data.username}</a>
-          <a className="user-datetime">{formatDate(data.dateTime)}</a>
+          <Link to={`/user/${data.username}`} className="username-info">
+            {data.username}
+          </Link>
+          <Link to={`/entry/${data.id}`} className="user-datetime">
+            {formatDate(data.dateTime)}
+          </Link>
         </div>
       </div>
     </li>

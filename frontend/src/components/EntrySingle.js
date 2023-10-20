@@ -9,14 +9,15 @@ const EntrySingle = ({ data }) => {
       username: "koraykzly",
       datetime: "14.10.2023 20:24",
       favCount: 5,
-      title: "topic"
+      topicTitle: "topic",
+      topicId: 1
     };
   }
 
   return (
     <div className="topic">
       <h1>
-        <a>{data.title}</a>
+        <a>{data.topicTitle}</a>
       </h1>
       <Entry data={data}></Entry>
     </div>

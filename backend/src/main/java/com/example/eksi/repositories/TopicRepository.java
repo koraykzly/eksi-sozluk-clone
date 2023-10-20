@@ -17,8 +17,8 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
 
     @Query("""
             SELECT
-                t.id id,
-                t.title title,
+                t.id topicId,
+                t.title topicTitle,
                 t.entryCountSinceMidnight entryCountSinceMidnight
             FROM Topic t
             ORDER BY t.lastEntered DESC
@@ -28,8 +28,8 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
 
     @Query("""
             SELECT
-                t.id id,
-                t.title title,
+                t.id topicId,
+                t.title topicTitle,
                 t.entryCountSinceMidnight entryCountSinceMidnight
             FROM Topic t
             ORDER BY t.entryCountSinceMidnight DESC, t.lastEntered DESC

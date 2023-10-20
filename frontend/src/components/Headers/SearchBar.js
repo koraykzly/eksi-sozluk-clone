@@ -1,4 +1,5 @@
 import "assets/css/Global.css";
+import Search from "components/TempIcons/Search";
 
 const SearchBar = () => {
   return (
@@ -9,8 +10,7 @@ const SearchBar = () => {
           placeholder="başlık, #entry, @yazar"
         ></input>
         <button className="search-button">
-          {/* <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" /> */}
-          Se
+          <Search />
         </button>
       </div>
     </>

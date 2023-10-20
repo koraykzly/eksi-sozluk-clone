@@ -1,0 +1,37 @@
+version: '3'
+
+name: eksi-clone-app
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_DB=testdb_eksi
+      - POSTGRES_USER=testuser_eksi
+      - POSTGRES_PASSWORD=dummypass
+    networks: 
+      - main-network
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks: 
+      - main-network
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    networks: 
+      - main-network
+
+networks:
+  main-network:

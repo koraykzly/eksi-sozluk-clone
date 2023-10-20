@@ -62,7 +62,7 @@ public class Entry {
 
     public Entry(@Size(min = 1, max = 51200) String content, @NotNull boolean isIncludeLink, Topic topic, User user) {
         super();
-        this.content = content;
+        this.content = content.toLowerCase();
         this.isIncludeLink = isIncludeLink;
         this.topic = topic;
         this.user = user;
@@ -89,7 +89,7 @@ public class Entry {
     }
 
     public void setContent(String content) {
-        this.content = content;
+        this.content = content.toLowerCase();
     }
 
     public LocalDateTime getDateTime() {

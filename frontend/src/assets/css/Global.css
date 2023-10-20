@@ -141,19 +141,6 @@ textarea {
   background-size: auto;
   color: #bdbdbd;
 }
-.svg-dots {
-  margin-right: 5px;
-  width: 30px;
-  height: 30px;
-  fill: #bdbdbd;
-  display: inline-block;
-  font-size: inherit;
-  vertical-align: middle;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: auto;
-  color: #bdbdbd;
-}
 
 .auth-container {
   float: right;
@@ -485,21 +472,21 @@ textarea {
   font-style: underline;
 }
 
-.subtitle-container {
+.submenu-container {
   margin: 0;
   padding: 0;
   display: inline-block;
   width: 100%;
 }
 
-.subtitle-menu {
+.submenu {
   margin: 0;
   padding: 0;
   float: left;
   margin-bottom: 10px;
   /* background-color: red; */
 }
-.subtitle-item {
+.submenu-item {
   margin-right: 20px;
   display: inline-block;
 }
@@ -572,6 +559,7 @@ textarea {
   padding: 0;
   border: 0;
   color: #bdbdbd;
+  /* display: inline-block; */
 }
 
 .feedback {
@@ -616,9 +604,16 @@ textarea {
 .username-info {
   color: #53a245;
   display: block;
+  font-size: 14px;
+}
+.username-info:hover {
+  color: #53a245;
 }
 .user-datetime {
   display: block;
+  font-size: 12px;
+  color: #666;
+
 }
 
 a:hover {
@@ -736,4 +731,48 @@ footer ul li {
   flex-grow: 1;
   padding: 0 5px;
   white-space: nowrap;
+}
+
+/* icons */
+
+.icon-entry-footer-fav:hover {
+  fill: #81c14b;
+}
+.icon-entry-footer-up:hover {
+  fill: green;
+}
+.icon-entry-footer-down:hover {
+  fill: red;
+}
+
+.icon-entry-footer {
+  height: 15px;
+  width: 15px;
+  margin: 5px;
+  stroke: #bdbdbd;
+  fill: #2d2d2d;
+  display: inline-block;
+  font-size: inherit;
+  vertical-align: middle;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+.icon-dots {
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  fill: #bdbdbd;
+  display: inline-block;
+  font-size: inherit;
+  vertical-align: middle;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: auto;
+  color: #bdbdbd;
+}
+
+.icon-search {
+  fill: #fff;
 }

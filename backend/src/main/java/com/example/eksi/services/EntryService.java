@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.eksi.domain.Entry;
@@ -17,12 +20,12 @@ import com.example.eksi.domain.User;
 import com.example.eksi.domain.keys.FavoriteEntriesKey;
 import com.example.eksi.exceptions.NotFoundException;
 import com.example.eksi.payload.response.EntryDto;
-import com.example.eksi.payload.response.EntryDtoForTopic;
 import com.example.eksi.payload.response.TopicEntries;
 import com.example.eksi.repositories.EntryRepository;
 import com.example.eksi.repositories.FavoriteEntriesRepository;
 import com.example.eksi.repositories.TopicRepository;
 import com.example.eksi.repositories.UserRepository;
+import com.example.eksi.repositories.projections.IDebe;
 import com.example.eksi.repositories.projections.IEntry;
 import com.example.eksi.repositories.projections.IEntrySingle;
 
@@ -107,10 +110,9 @@ public class EntryService {
         return urlCheckerPattern.matcher(content).find();
     }
 
-    public EntryDto getEntry(Long id) {
-        Entry entry = entryRepository.findById(id).orElseThrow(
+    public IEntry getEntry(Long id) {
+        return entryRepository.findByIdWithTitle(id).orElseThrow(
                 () -> new NotFoundException("Entry not found"));
-        return modelMapper.map(entry, EntryDto.class);
 
     }
 
@@ -136,25 +138,32 @@ public class EntryService {
         return entryRepository.findByIdWithTopicTitle(entryId).orElse(null);
     }
 
-    public TopicEntries getEntriesByTopicId(Long topicId) {
+    public TopicEntries getEntriesByTopicId(Long topicId, int page, int size) {
         Topic topic = topicRepository.findById(topicId).orElseThrow(
                 () -> new NotFoundException("Topic not found"));
-        
-        List<IEntrySingle> entries = entryRepository.findAllByTopicId(topicId);
-        
-        List<EntryDtoForTopic> dtos = entries.stream().map(ientry -> {
-            EntryDtoForTopic dto = new EntryDtoForTopic();
-            dto.setContent(ientry.getContent());
-            dto.setUsername(ientry.getUsername());
-            dto.setDateTime(ientry.getDateTime());
-            dto.setFavCount(ientry.getFavCount());
-            dto.setId(ientry.getId());
-            return dto;
-        }).toList();
 
-        return new TopicEntries(topic.getId(), topic.getTitle(), dtos);
-        
+        Sort sort = Sort.by(Sort.Direction.ASC, "dateTime");
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<IEntrySingle> entries = entryRepository.findAllByTopicId(topicId, pageRequest);
 
+        return new TopicEntries(topic.getId(), topic.getTitle(), entries);
+
+    }
+
+    public Page<IEntry> getEntriesByUsernameWithPagination(String username) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "dateTime");
+        PageRequest pageRequest = PageRequest.of(0, 10, sort);
+        return entryRepository.findAllByUsernameWithPage(username, pageRequest);
+
+    }
+    
+    public List<IEntry> getRandomEntries() {
+        return entryRepository.findRandomEntriesWithFavCountGreaterThan(40);
+        
+    }
+    
+    public List<IDebe> getDebe() {
+        return entryRepository.findMostUpvotedEntryTopicsFromYesterday();
     }
 
 }

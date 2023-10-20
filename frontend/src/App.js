@@ -10,7 +10,7 @@ import User from "views/User";
 import Message from "views/Message";
 import Event from "views/Event";
 import Header from "components/Headers/Header";
-import Entry from "views/Entry";
+import EntryPage from "views/EntryPage";
 
 import { useAuth } from "hooks/useAuth";
 
@@ -49,16 +49,16 @@ const App = () => {
               <Routes>
                 <Route
                   path="/"
-                  element={<Index clearTag={() => selectTag("")} />}
+                  element={<Index clearTag={() => selectTag("bugün")} />}
                   exact
                 />
-                <Route path="/:topicId" element={<EntrySection />} />
+                <Route path="topic/:topicId" element={<EntrySection />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/user/:username" element={<User />} />
                 <Route path="/message" element={<Message />} />
                 <Route path="/events" element={<Event />} />
-                <Route path="/entry/:id" element={<Entry />} />
+                <Route path="/entry/:id" element={<EntryPage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </div>

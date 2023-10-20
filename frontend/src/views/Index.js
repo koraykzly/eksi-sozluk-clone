@@ -15,7 +15,7 @@ const Index = ({clearTag}) => {
     });
   }, []);
 
-  clearTag()
+  // clearTag()
   // return <NotImplementedYet>Fill with random entries</NotImplementedYet>;
   return (
     <EntryContainer>

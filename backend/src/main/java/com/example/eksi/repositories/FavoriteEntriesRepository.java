@@ -7,15 +7,16 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.example.eksi.domain.EntryFavorited;
 import com.example.eksi.domain.keys.FavoriteEntriesKey;
-import com.example.eksi.repositories.projections.IEntryFavorited;
+import com.example.eksi.repositories.projections.IEntry;
 
 public interface FavoriteEntriesRepository extends JpaRepository<EntryFavorited, FavoriteEntriesKey> {
 
     @Query("""
-            SELECT 
+            SELECT
                 e.id id,
-                e.content content, 
-                t.title title,
+                e.content content,
+                t.id topicId,
+                t.title topicTitle,
                 u.username username,
                 e.favCount favCount,
                 e.dateTime dateTime
@@ -26,7 +27,7 @@ public interface FavoriteEntriesRepository extends JpaRepository<EntryFavorited,
             LEFT JOIN e.user u
             WHERE uf.username = :username
             """)
-    List<IEntryFavorited> findAllByUserUsername(String username);
-    
+    List<IEntry> findAllByUserUsername(String username);
+
 //    EntryFavorited save(FavoriteEntriesKey entity);
 }

@@ -6,7 +6,7 @@ const NotImplementedYet = ({children}) => {
       style={{
         textAlign: "center",
         width: "100%",
-        marginTop: "50px"
+        margin: "100px auto"
       }}
     >
       <p>This page not implemented yet :)</p>

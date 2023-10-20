@@ -33,11 +33,12 @@ public class TopicService {
         return topicRepository.getPopularTopics(100);
     }
 
+    public List<Tag> getTopicTags() {
+        return tagRepository.findAll();
+    }
+
     public List<ITopic> searchTopics() {
         return null;
     }
 
-    public List<Tag> getTopicTags() {
-        return tagRepository.findAll();
-    }
 }
