@@ -30,6 +30,8 @@ h6 {
 
 h1 {
   line-height: 1.4;
+  line-height: 1.4;
+  font-size: 21px;
 }
 
 h2 {
@@ -613,7 +615,6 @@ textarea {
   display: block;
   font-size: 12px;
   color: #666;
-
 }
 
 a:hover {
@@ -776,3 +777,187 @@ footer ul li {
 .icon-search {
   fill: #fff;
 }
+
+.icon-loading {
+  padding-left: 5px;
+  margin-top: 0;
+  fill: #666;
+  height: 15px;
+  width: 15px;
+  margin: 5px;
+  /* stroke: #bdbdbd; */
+  /* fill: #bdbdbd; */
+  display: inline-block;
+  font-size: inherit;
+  vertical-align: middle;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: auto;
+
+  /* display: inline-block; */
+  /* float: left; */
+}
+
+.left-side-title h2 {
+  display: inline-block;
+}
+
+.loading-animation {
+  animation: rotateAnimation 2s linear infinite;
+  /* transform: rotate(30deg); */
+}
+
+@keyframes rotateAnimation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* login */
+
+.form-container {
+  max-width: 360px;
+  width: 100%;
+  padding: 10px;
+}
+
+.input-label {
+  display: block;
+  float: none;
+  margin-right: 0;
+  padding-left: 0;
+  margin-bottom: 5px;
+  text-align: left;
+  width: 100%;
+  height: auto;
+}
+
+.form-input {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px 8px;
+  border: 1px solid #b0bec5;
+  border-radius: 2px;
+}
+
+.input-section {
+  margin-bottom: 10px;
+}
+
+.form-button {
+  display: block;
+  color: #fff;
+  background-color: #81c14b;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 14px;
+  line-height: 1.3333333;
+  border-radius: 2px;
+  border: 1px solid #74b43e;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  font-family: "Source Sans Pro";
+  /* vertical-align: middle; */
+  touch-action: manipulation;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.form-button:hover {
+  text-decoration: none;
+  color: #fff;
+  background-color: #68a138;
+  border-color: #57872e;
+}
+
+.form-helper-links {
+  width: 100%;
+  display: block;
+}
+
+.form-date {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.form-date select {
+  color: white;
+  background-color: #474747;
+  font-family: "Source Sans Pro", sans-serif;
+  float: left;
+  width: auto;
+  font-size: 100%;
+  height: 35px;
+  margin-right: 5px;
+  padding: 8px 8px;
+  border: 1px solid #b0bec5;
+  border-radius: 2px;
+  line-height: normal;
+}
+.form-date-inner {
+  display: block;
+  width: 100%;
+}
+
+/* register */
+
+.gender-container {
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.btn-group {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.btn-group button {
+  background-color: #202020;
+  color: #fff;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 10px;
+  font-size: 14px;
+  line-height: 1.2;
+  border-radius: 2px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+}
+
+.btn-group button:hover {
+  background-color: #81C14B;
+}
+.btn-active {
+  background-color: #81C14B !important;
+}
+
+.gender-inner {
+  display: block;
+  width: 100%;
+}
+
+.btn-group button:not(:first-child) {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+.btn-group button:not(:last-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+

@@ -7,6 +7,7 @@ import Topic from "./Topic";
 import { getDebeApi } from "api/ApiService";
 import Debe from "./Debe";
 import ClickableBox from "./ClickableBox";
+import Loading from "./TempIcons/Loading";
 
 // type: bugün, gündem, debe
 const TopicSection = ({ type, topicSectionRef }) => {
@@ -55,6 +56,7 @@ const TopicSection = ({ type, topicSectionRef }) => {
       <nav ref={topicSectionRef} className="partial-left-side">
         <div className="left-side-title">
           <h2>{title}</h2>
+          {/* {loading ? <Loading /> : null} */}
         </div>
 
         {type === "bugün" ? (

@@ -61,8 +61,9 @@ const EntrySection = () => {
       {/* subtitle menu */}
       <div className="submenu-container">
         <TopicSubmenu />
-
-        <Pager currentPage={page + 1} totalPage={totalPage} />
+        {totalPage > 1 ? (
+          <Pager currentPage={page + 1} totalPage={totalPage} />
+        ) : null}
       </div>
 
       <EntryContainer>
@@ -71,7 +72,9 @@ const EntrySection = () => {
         })}
       </EntryContainer>
 
-      <Pager currentPage={page + 1} totalPage={totalPage} />
+      {totalPage > 1 ? (
+        <Pager currentPage={page + 1} totalPage={totalPage} />
+      ) : null}
 
       <SubmitEntrySection title={title}></SubmitEntrySection>
     </div>
