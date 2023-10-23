@@ -12,6 +12,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.eksi.domain.User;
+import com.example.eksi.exceptions.NotFoundException;
+import com.example.eksi.repositories.UserRepository;
+import com.example.eksi.security.services.UserDetailsImpl;
 import com.example.eksi.security.services.UserDetailsServiceImpl;
 
 import jakarta.servlet.FilterChain;
@@ -26,6 +30,9 @@ public class TokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(TokenFilter.class);
 
     @Override
@@ -36,7 +43,10 @@ public class TokenFilter extends OncePerRequestFilter {
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                User user = userRepository.findByUsername(username).orElseThrow(
+                        () -> new NotFoundException("User not found: " + username));
+                UserDetails userDetails = UserDetailsImpl.build(user);
+
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

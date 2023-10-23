@@ -57,7 +57,6 @@ public class BasicAuthSecurityConfiguration {
                         .requestMatchers("/api/users/**").permitAll()
                         .requestMatchers("/api/topics/tags").permitAll()
                         .requestMatchers("/api/topics/popular").permitAll()
-                        .requestMatchers("/api/topics/today").permitAll()
                         .requestMatchers("/api/topics/id/**").permitAll()
                         .requestMatchers("/api/entries/**").permitAll()
                         .anyRequest().authenticated());

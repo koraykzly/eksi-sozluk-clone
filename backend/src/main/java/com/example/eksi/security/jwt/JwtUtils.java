@@ -51,9 +51,12 @@ public class JwtUtils {
     }
 
     public JwtPair generateJwtPair(Authentication authentication) {
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        
         return new JwtPair(
                 generateAccessToken(authentication),
-                generateRefreshToken(authentication));
+                generateRefreshToken(authentication),
+                userPrincipal.getUsername());
     }
 
     private long getMilisecond(int minute) {

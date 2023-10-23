@@ -3,11 +3,14 @@ package com.example.eksi.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import com.example.eksi.payload.response.ErrorMessage;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,4 +47,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body("Invalid parameter type " + ex.getName());
     }
 
+    @ExceptionHandler(SignupException.class)
+    public ResponseEntity<ErrorMessage> handleSignupException(SignupException ex) {
+        return ResponseEntity.badRequest().body(new ErrorMessage(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorMessage> handleSignupException(AuthenticationException ex) {
+        return ResponseEntity.badRequest().body(new ErrorMessage(ex.getMessage()));
+    }
 }
