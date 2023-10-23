@@ -22,8 +22,6 @@ import EntrySection from "components/EntrySection";
 import Footer from "components/Footer";
 
 const App = () => {
-  const auth = useAuth();
-
   const [tag, selectTag] = useState("gündem");
   const topicSectionRef = useRef(null);
 
@@ -37,10 +35,9 @@ const App = () => {
     <AuthProvider>
       <BrowserRouter>
         <Header
-          isAuthenticated={!auth.isAuthenticated}
           selectTag={selectTag}
           tag={tag}
-          topicSectionRef={scrollUpTopicSection}
+          scrollUpTopicSection={scrollUpTopicSection}
         />
         <main className="main-container">
           <TopicSection topicSectionRef={topicSectionRef} type={tag} />

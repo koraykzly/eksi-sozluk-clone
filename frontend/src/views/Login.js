@@ -1,19 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useAuth } from "hooks/useAuth";
+import React, { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const username = useRef(null);
+  const password = useRef(null);
+  const [error, setError] = useState(null);
+
+  const auth = useAuth();
+  const nav = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const success = await auth.login(
+      username.current.value,
+      password.current.value
+    );
+    if (success) {
+      nav("/");
+    } else {
+      setError("hatalı kullanıcı ya da şifre, ama hangisi söylemem.");
+    }
+  };
+
   return (
     <div className="form-container">
       <h1>giriş</h1>
-      <form>
+
+      {error ? <p className="form-error">{error}</p> : null}
+
+      <form onSubmit={handleLogin}>
         <div className="input-section">
           <label className="input-label">e-mail adresi</label>
-          <input className="form-input"></input>
+          <input ref={username} className="form-input"></input>
         </div>
 
         <div className="input-section">
           <label className="input-label">şifre</label>
-          <input className="form-input"></input>
+          <input ref={password} className="form-input" type="password"></input>
         </div>
 
         <div className="input-section">
@@ -27,15 +51,6 @@ const Login = () => {
       </form>
 
       <h1>giremeyiş</h1>
-      {/* <ul>
-        <li>
-          <Link className="form-helepr-links">şifremi unuttum</Link>
-        </li>
-        <li>
-          <Link className="form-helepr-links">kayıtlı kullanıcı olunası</Link>
-        </li>
-      </ul> */}
-
       <Link to="/password-reset" className="form-helper-links">
         şifremi unuttum
       </Link>

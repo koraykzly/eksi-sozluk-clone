@@ -32,7 +32,6 @@ const Register = () => {
           }}
         />
         <GenderPicker gender={gender} onGenderChange={setGender} />
-        
 
         <div className="input-section"></div>
       </form>

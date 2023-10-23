@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, generatePath, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // const toPage = (i, nav) => {
 //   nav(`?page=${i}&size=10`);
@@ -8,7 +8,7 @@ import { Link, generatePath, useNavigate } from "react-router-dom";
 const optionGenerator = (to, currentPage) => {
   const list = [];
   for (let i = 1; i <= to; i++) {
-    list.push(<option selected={i === currentPage}>{i}</option>);
+    list.push(<option key={i} value={i}>{i}</option>);
   }
   return list;
 };
@@ -24,13 +24,10 @@ const Pager = ({ currentPage, totalPage }) => {
   return (
     <div className="pager">
       {currentPage > 1 ? <Link to={`?page=${currentPage - 1}`}>«</Link> : null}
-
-      <select onChange={handleOptionChange}>
+      <select value={currentPage} onChange={handleOptionChange}>
         {optionGenerator(totalPage, currentPage)}
       </select>
-      /
-      <Link to={`?page=${totalPage}`}>{totalPage}</Link>
-
+      /<Link to={`?page=${totalPage}`}>{totalPage}</Link>
       {currentPage !== totalPage ? (
         <Link to={`?page=${currentPage + 1}`}>»</Link>
       ) : null}

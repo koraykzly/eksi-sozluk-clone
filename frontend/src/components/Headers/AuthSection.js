@@ -5,7 +5,7 @@ const AuthSection = () => {
   return (
     <>
       <div className="auth-container">
-        <ul className="list">
+        <ul className="auth-section-list">
           <li>
             <Link to="/login">giris</Link>
           </li>

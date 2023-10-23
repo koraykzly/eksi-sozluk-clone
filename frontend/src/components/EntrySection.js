@@ -30,7 +30,6 @@ const EntrySection = () => {
   useEffect(() => {
     getEntriesByTopicIdApi(topicId, page)
       .then((response) => {
-        console.log(response.data);
         setData(response.data.entries.content);
         setTitle(response.data.title);
         setTotalPage(response.data.entries.totalPages);

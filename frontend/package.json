@@ -19,6 +19,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "axios": "^1.5.1",
     "react": ">=16.0.0",
     "react-copy-to-clipboard": "5.1.0",

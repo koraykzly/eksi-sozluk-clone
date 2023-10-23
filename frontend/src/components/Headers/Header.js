@@ -4,33 +4,34 @@ import SearchBar from "./SearchBar";
 import BottomNavigation from "./BottomNavigation";
 import AuthSection from "./AuthSection";
 import UserSection from "./UserSection";
+import { useAuth } from "hooks/useAuth";
 
-const Header = ({ isAuthenticated, selectTag, topicSectionRef, tag }) => {
+const Header = ({ selectTag, scrollUpTopicSection, tag }) => {
+  const auth = useAuth();
+
   let userSection = <UserSection />;
-  if (isAuthenticated === undefined || isAuthenticated === false) {
+  if (!auth.isAuthenticated) {
     userSection = <AuthSection />;
   }
 
   const updateTopicSection = (tag) => {
     selectTag(tag);
-    topicSectionRef();
+    scrollUpTopicSection();
   };
 
   return (
-    <>
-      <div className="header">
-        <div className="top-bar">
-          <Logo />
-          <SearchBar />
-          {userSection}
-          <BottomNavigation
-            tag={tag}
-            isAuthenticated={isAuthenticated}
-            updateTopicSection={updateTopicSection}
-          />
-        </div>
+    <div className="header">
+      <div className="top-bar">
+        <Logo />
+        <SearchBar />
+        {userSection}
+        <BottomNavigation
+          tag={tag}
+          isAuthenticated={auth.isAuthenticated}
+          updateTopicSection={updateTopicSection}
+        />
       </div>
-    </>
+    </div>
   );
 };
 

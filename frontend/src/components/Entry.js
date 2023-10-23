@@ -4,6 +4,8 @@ import UpVote from "./TempIcons/UpVote";
 import Share from "./TempIcons/Share";
 import Dots from "./TempIcons/Dots";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import EntryDropDownMenu from "./EntryDropDownMenu";
 
 function formatDate(inputDate) {
   const date = new Date(inputDate);
@@ -27,6 +29,8 @@ const Entry = ({ data }) => {
     };
   }
 
+  const [menu, openMenu] = useState(false);
+
   return (
     <li className="entry-item">
       <div className="entry-content">{data.content}</div>
@@ -36,9 +40,10 @@ const Entry = ({ data }) => {
             <a>
               <Share />
             </a>
-            <a>
+            <a onClick={() => openMenu(true)}>
               <Dots />
             </a>
+            <EntryDropDownMenu isOpen={menu} setIsOpen={openMenu}/>
           </div>
           <span className="vote-section">
             <a>

@@ -25,7 +25,7 @@ export const addEntryToFavoriteApi = (entryId) => {
 
 export const authenticateUserApi = (username, password) => {
     return apiClient.post('/api/auth/login', {
-        username: username,
+        email: username,
         password: password
     });
 };

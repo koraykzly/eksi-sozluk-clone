@@ -43,7 +43,11 @@ const DatetimePicker = ({ values, onChangeFunctions }) => {
           >
             <option value=""></option>
             {[...range(1, 31)].map((item) => {
-              return <option value={item}>{item}</option>;
+              return (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              );
             })}
           </select>
           <select
@@ -52,7 +56,11 @@ const DatetimePicker = ({ values, onChangeFunctions }) => {
           >
             <option value=""></option>
             {MONTHS.map((item) => {
-              return <option value={item}>{item}</option>;
+              return (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              );
             })}
           </select>
           <select
@@ -61,7 +69,11 @@ const DatetimePicker = ({ values, onChangeFunctions }) => {
           >
             <option value=""></option>
             {[...reverseRange(2006, 1900)].map((item) => {
-              return <option value={item}>{item}</option>;
+              return (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              );
             })}
           </select>
         </div>
