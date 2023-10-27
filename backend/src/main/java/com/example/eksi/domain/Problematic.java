@@ -31,6 +31,9 @@ public class Problematic {
 
     @Size(min = 1, max = 51200)
     private String content;
+    
+    @Size(min = 1, max = 512)
+    private String title;
 
     @Column
     private LocalDateTime datetime;

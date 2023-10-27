@@ -28,9 +28,6 @@ public class TokenFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
     private UserRepository userRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(TokenFilter.class);

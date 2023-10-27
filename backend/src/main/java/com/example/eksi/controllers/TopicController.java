@@ -17,6 +17,7 @@ import com.example.eksi.domain.Tag;
 import com.example.eksi.payload.request.InsertTopicRequest;
 import com.example.eksi.payload.response.EntryDto;
 import com.example.eksi.payload.response.TopicEntries;
+import com.example.eksi.repositories.projections.IDebe;
 import com.example.eksi.repositories.projections.ITopic;
 import com.example.eksi.security.services.UserDetailsImpl;
 import com.example.eksi.services.EntryService;
@@ -68,6 +69,12 @@ public class TopicController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return entryService.getEntriesByTopicId(topicId, page, size);
+
+    }
+
+    @GetMapping(value = "/debe")
+    public List<IDebe> getDebe() {
+        return entryService.getDebe();
 
     }
 

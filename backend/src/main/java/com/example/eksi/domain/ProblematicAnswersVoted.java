@@ -3,7 +3,7 @@ package com.example.eksi.domain;
 import java.time.LocalDateTime;
 
 import com.example.eksi.domain.enums.EVote;
-import com.example.eksi.domain.keys.ProblematicAnswerVotedKey;
+import com.example.eksi.domain.keys.ProblematicAnswersVotedKey;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -17,11 +17,11 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "problematic_answer_voted")
-public class ProblematicAnswerVoted {
+@Table(name = "problematic_answers_voted")
+public class ProblematicAnswersVoted {
 
     @EmbeddedId
-    private ProblematicAnswerVotedKey id;
+    private ProblematicAnswersVotedKey id;
 
     @ManyToOne
     @MapsId("userId")
@@ -29,9 +29,9 @@ public class ProblematicAnswerVoted {
     private User user;
 
     @ManyToOne
-    @MapsId("problematicId")
-    @JoinColumn(name = "problematic_id")
-    private Problematic problematic;
+    @MapsId("problematicAnswerId")
+    @JoinColumn(name = "problematic_answer_id")
+    private ProblematicAnswers problematicAnswers;
 
     @Column
     private LocalDateTime datetime;

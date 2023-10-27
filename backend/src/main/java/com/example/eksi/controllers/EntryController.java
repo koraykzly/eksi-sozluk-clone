@@ -2,8 +2,6 @@ package com.example.eksi.controllers;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.eksi.payload.request.EntryRequest;
 import com.example.eksi.payload.response.EntryDto;
-import com.example.eksi.repositories.projections.IDebe;
 import com.example.eksi.repositories.projections.IEntry;
 import com.example.eksi.security.services.UserDetailsImpl;
 import com.example.eksi.services.EntryService;
@@ -69,11 +66,7 @@ public class EntryController {
         return entryService.getEntriesByUsernameWithPagination(username);
 
     }
-
-    @GetMapping(value = "/d/debe")
-    public List<IDebe> getDebe() {
-        return entryService.getDebe();
-
-    }
+    
+    
 
 }

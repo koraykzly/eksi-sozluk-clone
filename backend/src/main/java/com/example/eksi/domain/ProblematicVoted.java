@@ -2,47 +2,45 @@ package com.example.eksi.domain;
 
 import java.time.LocalDateTime;
 
+import com.example.eksi.domain.enums.EVote;
+import com.example.eksi.domain.keys.ProblematicVotedKey;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "problematic_answers")
-public class ProblematicAnswers {
+@Table(name = "problematic_voted")
+public class ProblematicVoted {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private ProblematicVotedKey id;
 
     @ManyToOne
+    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @MapsId("problematicId")
     @JoinColumn(name = "problematic_id")
     private Problematic problematic;
 
-    @Size(min = 1, max = 51200)
-    private String content;
-
     @Column
     private LocalDateTime datetime;
+
+    @Enumerated(EnumType.ORDINAL)
+    private EVote type;
 
     @PrePersist
     public void prePersist() {
         this.datetime = LocalDateTime.now();
     }
-
-    @Column
-    private int upvoted;
-
-    @Column
-    private int downvoted;
 }

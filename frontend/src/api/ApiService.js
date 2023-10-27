@@ -14,7 +14,7 @@ export const getEntryApi = (entryId) => {
 };
 
 export const getDebeApi = () => {
-    return apiClient.get(`/api/entries/d/debe`);
+    return apiClient.get(`/api/topics/debe`);
 };
 
 export const addEntryToFavoriteApi = (entryId) => {

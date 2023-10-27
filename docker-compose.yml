@@ -1,6 +1,6 @@
 version: '3'
 
-name: eksi-clone-app
+name: eksi-clone-dev
 
 services:
   postgres:
@@ -23,11 +23,12 @@ services:
       - postgres
     networks: 
       - main-network
-
+      
   frontend:
     container_name: frontend
     build:
       context: ./frontend
+      dockerfile: Dockerfile.prod
     ports:
       - "3000:3000"
     networks: 
