@@ -6,12 +6,6 @@ Ekşi sözlük clone project just for practice on <b>Spring Boot</b> and <b>Reac
 
 ## Run (Docker)
 
-You should build the backend first.
-
-    cd backend
-    ./mvnw clean package
-
-    cd ..
     docker-compose up -d
 
 

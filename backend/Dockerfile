@@ -1,11 +1,27 @@
-FROM openjdk:17-alpine
+# İlk aşama: Derleme işlemi
+FROM maven:3.8.4-openjdk-17 AS build
 
-ENV spring_profiles_active=docker
-
+# Proje dizinine geç
 WORKDIR /app
 
-COPY ./src /app/src
+# Proje bağımlılıklarını yükle ve kaynak dosyaları kopyala
+COPY pom.xml .
+COPY src ./src
 
-COPY ./target/eksi-app.jar /app
+# Projeyi derle
+RUN mvn clean package -DskipTests
 
+# İkinci aşama: Derlenmiş projeyi çalıştırma
+FROM openjdk:17-alpine
+
+# Profil ayarlarını belirle
+ENV spring_profiles_active=docker
+
+# Çalışma dizinine geç
+WORKDIR /app
+
+# Derlenmiş JAR dosyasını bir önceki aşamadan kopyala
+COPY --from=build /app/target/eksi-app.jar /app/eksi-app.jar
+
+# Uygulamayı çalıştır
 CMD ["java", "-jar", "eksi-app.jar"]
