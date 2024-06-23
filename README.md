@@ -9,6 +9,14 @@ Ekşi sözlük clone project just for practice on <b>Spring Boot</b> and <b>Reac
     docker-compose up -d
 
 
+## Populate Database
+
+Wait until the backend up, then
+
+    docker exec -it postgres bash
+    psql -U testuser_eksi -d testdb_eksi -f /sample_data.sql > /dev/null
+
+
 ## To Do List
 
 - Complete the missing pages

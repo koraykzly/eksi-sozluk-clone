@@ -12,6 +12,8 @@ services:
       - POSTGRES_PASSWORD=dummypass
     networks: 
       - main-network
+    volumes:
+      - ./sample_data.sql:/sample_data.sql
 
   backend:
     container_name: backend
