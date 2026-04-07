@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: eksi
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testdb_eksi
+    username: testuser_eksi
+    password: dummypass
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    # show-sql: true
+
+  # sql:
+  #   init:
+  #     mode: always
+
+  # security:
+  #   user:
+  #     name: koray
+  #     password: 1234
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+jwt:
+  secret: deba9893aca64f00b097a8b074ffa346deba9893aca64f00b097a8b074ffa346
+  access:
+    expirationMin: 120
+  refresh:
+    expirationMin: 1440

@@ -1,7 +1,10 @@
 # Ekşi Sözlük Clone - Frontend
 
-<h3 align="center"><font color="red">Under development!</font></h3>
+## Run (Docker)
 
-## Run
+    docker compose up -d frontend
 
-    npm start
+## Run (Local)
+
+    npm install
+    npm run start

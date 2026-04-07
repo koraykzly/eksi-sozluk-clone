@@ -33,26 +33,26 @@ public class JwtUtils {
     public JwtBuilder generateJwtBase(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .signWith(key(), SignatureAlgorithm.HS256);
+                .subject(userPrincipal.getUsername())
+                .issuedAt(new Date())
+                .signWith(key());
     }
 
     public String generateAccessToken(Authentication authentication) {
         return generateJwtBase(authentication)
-                .setExpiration(new Date((new Date()).getTime() + getMilisecond(jwtAccessExpirationMin)))
+                .expiration(new Date((new Date()).getTime() + getMilisecond(jwtAccessExpirationMin)))
                 .compact();
     }
 
     public String generateRefreshToken(Authentication authentication) {
         return generateJwtBase(authentication)
-                .setExpiration(new Date((new Date()).getTime() + getMilisecond(jwtRefreshExpirationMin)))
+                .expiration(new Date((new Date()).getTime() + getMilisecond(jwtRefreshExpirationMin)))
                 .compact();
     }
 
     public JwtPair generateJwtPair(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-        
+
         return new JwtPair(
                 generateAccessToken(authentication),
                 generateRefreshToken(authentication),
@@ -68,12 +68,20 @@ public class JwtUtils {
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser()
+                .verifyWith((javax.crypto.SecretKey) key())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+            Jwts.parser()
+                    .verifyWith((javax.crypto.SecretKey) key())
+                    .build()
+                    .parseSignedClaims(authToken);
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());

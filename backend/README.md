@@ -1,16 +1,11 @@
-# Ekşi Sözlük Clone
+# Ekşi Sözlük Clone - Backend
 
-<h3 align="center"><font color="red">Under development!</font></h3>
+## Run (Docker)
 
-## Run
+    docker compose up -d backend
 
-Windows
-	
-	mvwn.cmd clean package
-	java -jar target\eksi-app.jar
+### Populate Database
 
-Linux
+Wait until the database up, then
 
-    ./mvwn clean package
-    java -jar target/eksi-app.jar
-    
+    docker exec -i postgres psql -U testuser_eksi -d testdb_eksi -f /sample_data.sql > /dev/null

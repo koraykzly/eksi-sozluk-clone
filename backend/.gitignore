@@ -1,35 +1,104 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Logs
+*.log
+# Temporary files
+*.tmp
+*~
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+*.bak
+# Environment files (containing secrets, API keys, credentials)
+.env
+*.env
+.env.*
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# Local configuration that shouldn't be shared
+*.local
+
+.gradle
+
+### Intellij ###
+# IntelliJ IDEA editor files and settings
+
+# IntelliJ IDEA and Other JetBrains IDEs
+.idea/
 *.iml
+*.iws
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+.idea_modules/
+out/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+
+.idea/shelf/
+.idea/contentModel.xml
+.idea/dataSources/
+.idea/dataSources.xml
+.idea/dataSources.ids
+
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+.idea/gradle.xml
+
+.idea/libraries
+.idea/deployment.xml
+.idea/mongoSettings.xml
+.idea/httpRequests
+.idea/caches/
+
+.idea/modules.xml
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/artifacts
+.idea/sonarlint/
+
+*.iml.bak
+*.ipr.bak
+*.iws.bak
+.idea_backup/
+.idea/replstate.xml
+
+.idea/checkstyle-idea.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+
+.idea/assetWizardSettings.xml
+.idea/kotlinc.xml
+.idea/inspectionProfiles/
+.idea/codestream.xml
+.idea/aws.xml
+
+.idea/sonarIssues.xml
+.idea/.gitignore
+.idea/remote-mappings.xml
+.idea/**/usage.statistics.xml
+.idea/**/contentModel.xml
+
+.idea/**/dbnavigator.xml
+.idea/**/markdown-navigator.xml
+.idea/**/markdown-navigator-enh.xml
+.idea/**/markdown-navigator/
+.idea/$CACHE_FILE$
+
+.idea/**/azureSettings.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+### Spring ###
+# spring specific files
+
+*.class
+*.war
+*.ear
+.gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
-
-my_notes.txt
+target/
+.idea/
+*.iml

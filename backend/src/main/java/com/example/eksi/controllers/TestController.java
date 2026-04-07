@@ -29,7 +29,7 @@
 //
 //    @GetMapping(value = "/test")
 //    public HelloWorldBean getTest() {
-////        topicRepository.findAll(Pageable.ofSize(5));
+//        topicRepository.findAll(Pageable.ofSize(5));
 //
 //        return new HelloWorldBean("test-bean");
 //    }

@@ -1,27 +1,21 @@
-# İlk aşama: Derleme işlemi
-FROM maven:3.8.4-openjdk-17 AS build
-
-# Proje dizinine geç
+FROM gradle:9.4.1-jdk25-alpine AS build
 WORKDIR /app
 
-# Proje bağımlılıklarını yükle ve kaynak dosyaları kopyala
-COPY pom.xml .
+COPY gradlew build.gradle settings.gradle ./
+COPY gradle ./gradle
+
+RUN ./gradlew build --no-daemon > /dev/null 2>&1 || true
+
 COPY src ./src
+RUN ./gradlew bootJar --no-daemon
 
-# Projeyi derle
-RUN mvn clean package -DskipTests
+FROM eclipse-temurin:25-jre-alpine
+WORKDIR /app
 
-# İkinci aşama: Derlenmiş projeyi çalıştırma
-FROM openjdk:17-alpine
-
-# Profil ayarlarını belirle
 ENV spring_profiles_active=docker
 
-# Çalışma dizinine geç
-WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
 
-# Derlenmiş JAR dosyasını bir önceki aşamadan kopyala
-COPY --from=build /app/target/eksi-app.jar /app/eksi-app.jar
+EXPOSE 8080
 
-# Uygulamayı çalıştır
-CMD ["java", "-jar", "eksi-app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
