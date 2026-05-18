@@ -1,5 +1,6 @@
 package com.example.eksi.domain.keys;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,24 +8,25 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class FollowedUsersKey implements Serializable {
+public class FollowingUsersKey implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -7090690964533635946L;
 
     @Column(name = "follower_user_id")
     Long followerUserId;
 
-    @Column(name = "followed_user_id")
-    Long followedUserId;
+    @Column(name = "following_user_id")
+    Long followingUserId;
 
-    public FollowedUsersKey() {
+    public FollowingUsersKey() {
         super();
     }
 
-    public FollowedUsersKey(Long followerUserId, Long followedUserId) {
+    public FollowingUsersKey(Long followerUserId, Long followingUserId) {
         super();
         this.followerUserId = followerUserId;
-        this.followedUserId = followedUserId;
+        this.followingUserId = followingUserId;
     }
 
     public Long getFollowerUserId() {
@@ -35,17 +37,17 @@ public class FollowedUsersKey implements Serializable {
         this.followerUserId = followerUserId;
     }
 
-    public Long getFollowedUserId() {
-        return followedUserId;
+    public Long getFollowingUserId() {
+        return followingUserId;
     }
 
-    public void setFollowedUserId(Long followedUserId) {
-        this.followedUserId = followedUserId;
+    public void setFollowingUserId(Long followingUserId) {
+        this.followingUserId = followingUserId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(followedUserId, followerUserId);
+        return Objects.hash(followingUserId, followerUserId);
     }
 
     @Override
@@ -56,8 +58,8 @@ public class FollowedUsersKey implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        FollowedUsersKey other = (FollowedUsersKey) obj;
-        return Objects.equals(followedUserId, other.followedUserId)
+        FollowingUsersKey other = (FollowingUsersKey) obj;
+        return Objects.equals(followingUserId, other.followingUserId)
                 && Objects.equals(followerUserId, other.followerUserId);
     }
 

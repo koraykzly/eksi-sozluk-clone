@@ -23,6 +23,6 @@ public class TopicTags {
     @ManyToOne
     @MapsId("topicId")
     @JoinColumn(name = "topic_id")
-    private Topic entry;
+    private Topic topic;
 
 }

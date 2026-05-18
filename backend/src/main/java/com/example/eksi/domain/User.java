@@ -1,6 +1,7 @@
 package com.example.eksi.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.example.eksi.domain.enums.EGender;
@@ -14,8 +15,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -39,6 +40,14 @@ public class User {
 
     private String biography;
 
+    private String profileImageUrl;
+
+    private String profileImageKey;
+
+    @NotNull
+    @Column(nullable = false, updatable = false, columnDefinition = "timestamp default current_timestamp")
+    private LocalDateTime signupDatetime;
+
     @NotNull
     private LocalDate birthday;
 
@@ -48,11 +57,10 @@ public class User {
     @Enumerated(EnumType.ORDINAL)
     private ERole role;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Entry> entries;
 
-    private int followedCount;
+    private int followingCount;
 
     private int followerCount;
 
@@ -60,15 +68,23 @@ public class User {
 
     public User(@NotNull String username, @NotNull String email, @NotNull String password,
             @NotNull LocalDate birthday, EGender gender, ERole role) {
-        this.username = username.toLowerCase();
-        this.email = email.toLowerCase();
+        setUsername(username);
+        setEmail(email);
         this.password = password;
+        this.signupDatetime = LocalDateTime.now();
         this.birthday = birthday;
         this.gender = gender;
         this.role = role;
     }
 
     public User() {
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (signupDatetime == null) {
+            signupDatetime = LocalDateTime.now();
+        }
     }
 
     public Long getId() {
@@ -84,7 +100,7 @@ public class User {
     }
 
     public void setUsername(String username) {
-        this.username = username.toLowerCase();
+        this.username = normalizeLowercase(username);
     }
 
     public String getEmail() {
@@ -92,7 +108,11 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email.toLowerCase();
+        this.email = normalizeLowercase(email);
+    }
+
+    private String normalizeLowercase(String value) {
+        return value == null ? null : value.trim().toLowerCase();
     }
 
     public String getPassword() {
@@ -135,12 +155,12 @@ public class User {
         this.gender = gender;
     }
 
-    public int getFollowedCount() {
-        return followedCount;
+    public int getFollowingCount() {
+        return followingCount;
     }
 
-    public void setFollowedCount(int followedCount) {
-        this.followedCount = followedCount;
+    public void setFollowingCount(int followingCount) {
+        this.followingCount = followingCount;
     }
 
     public int getFollowerCount() {
@@ -164,7 +184,31 @@ public class User {
     }
 
     public void setBiography(String biography) {
-        this.biography = biography.toLowerCase();
+        this.biography = biography;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getProfileImageKey() {
+        return profileImageKey;
+    }
+
+    public void setProfileImageKey(String profileImageKey) {
+        this.profileImageKey = profileImageKey;
+    }
+
+    public LocalDateTime getSignupDatetime() {
+        return signupDatetime;
+    }
+
+    public void setSignupDatetime(LocalDateTime signupDatetime) {
+        this.signupDatetime = signupDatetime;
     }
 
 

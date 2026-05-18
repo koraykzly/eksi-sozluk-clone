@@ -43,24 +43,34 @@ const BottomNavigation = ({ isAuthenticated, updateTopicSection, tag }) => {
           >
             debe
           </li>
-          <li
-            className={isActive("sorunsallar")}
-            onClick={() => setCurrentTag("sorunsallar")}
-          >
-            sorunsallar
-          </li>
 
           {isAuthenticated ? (
             <>
               <li>takip</li>
               <li>son</li>
-              <li>kenar</li>
-              <li>çaylaklar</li>
+              <li
+                className={isActive("kenar")}
+                onClick={() => setCurrentTag("kenar")}
+              >
+                kenar
+              </li>
+              <li
+                className={isActive("çaylaklar")}
+                onClick={() => setCurrentTag("çaylaklar")}
+              >
+                çaylaklar
+              </li>
             </>
           ) : null}
 
           {NAV_TAGS.slice(0, 3).map((item, index) => {
-            return <li key={index}>{`#${item}`}</li>;
+            return <li 
+              key={index}
+              className={isActive(`#${item}`)}
+              onClick={() => setCurrentTag(`#${item}`)}
+            >
+              {`#${item}`}
+            </li>;
           })}
           <li>...</li>
         </ul>

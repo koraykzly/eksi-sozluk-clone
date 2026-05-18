@@ -6,6 +6,7 @@ import { getEntryApi } from "@/api/ApiService";
 import EntryContainer from "@/components/EntryContainer";
 // import EntrySingle from "@/components/EntrySingle";
 import TopicSubmenu from "@/components/TopicSubmenu";
+import SubmitEntrySection from "@/components/SubmitEntrySection";
 
 const EntryPage = () => {
   const { id } = useParams();
@@ -30,6 +31,7 @@ const EntryPage = () => {
       <EntryContainer>
         <Entry data={entry}></Entry>
       </EntryContainer>
+      <SubmitEntrySection title={entry.topicTitle}></SubmitEntrySection>
     </div>
   ) : null;
 };

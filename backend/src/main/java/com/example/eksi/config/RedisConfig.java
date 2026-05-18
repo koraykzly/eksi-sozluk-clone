@@ -1,3 +1,4 @@
+/*
 package com.example.eksi.config;
 
 import org.springframework.context.annotation.Bean;
@@ -19,3 +20,4 @@ public class RedisConfig {
         return template;
     }
 }
+*/

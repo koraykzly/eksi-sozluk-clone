@@ -3,8 +3,7 @@ WORKDIR /app
 
 COPY gradlew build.gradle settings.gradle ./
 COPY gradle ./gradle
-
-RUN ./gradlew build --no-daemon > /dev/null 2>&1 || true
+RUN ./gradlew dependencies --no-daemon
 
 COPY src ./src
 RUN ./gradlew bootJar --no-daemon
@@ -12,9 +11,10 @@ RUN ./gradlew bootJar --no-daemon
 FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 
-ENV spring_profiles_active=docker
+ENV SPRING_PROFILES_ACTIVE=docker
 
 COPY --from=build /app/build/libs/*.jar app.jar
+COPY uploads/profile-images/default-profile-picture-light.jpg uploads/profile-images/default-profile-picture-light.jpg
 
 EXPOSE 8080
 

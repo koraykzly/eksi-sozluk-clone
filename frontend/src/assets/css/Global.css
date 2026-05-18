@@ -240,6 +240,35 @@ textarea {
   /* padding: 8px 8px; */
 }
 
+.search-results {
+  background-color: #2d2d2d;
+  border: 1px solid #494949;
+  border-radius: 3px;
+  color: #bdbdbd;
+  position: absolute;
+  margin-top: 8px;
+  z-index: 9999;
+  list-style: none !important;
+  box-sizing: border-box;
+  width: 372px;
+}
+
+.search-results li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  box-sizing: border-box;
+  color: #bdbdbd;
+  list-style: none !important;
+  left: 0;
+  margin-left: 1px;
+}
+
+.search-results li:hover {
+  background-color: #4D4D4D;
+}
+
 /* .search-container .search-input:focus {
   outline: none;
 } */
@@ -462,6 +491,7 @@ textarea {
 .topic h1 {
   word-break: break-word;
   font-size: 22px;
+  font-style: bold;
   margin: 10px 0;
 }
 .topic h1 a {

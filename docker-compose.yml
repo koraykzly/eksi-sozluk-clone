@@ -1,17 +1,22 @@
 name: eksi-clone-dev
 
 services:
-  postgres:
-    container_name: postgres
-    image: postgres:13-alpine
+  database:
+    container_name: database
+    image: postgres:16-alpine
     environment:
       - POSTGRES_DB=testdb_eksi
       - POSTGRES_USER=testuser_eksi
       - POSTGRES_PASSWORD=dummypass
+    ports:
+      - "5432:5432"
     networks: 
       - main-network
-    volumes:
-      - ./sample_data.sql:/sample_data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser_eksi -d testdb_eksi"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   backend:
     container_name: backend
@@ -20,7 +25,9 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
+      database:
+        condition: service_healthy
+
     networks: 
       - main-network
       

@@ -17,8 +17,27 @@ export const getDebeApi = () => {
   return apiClient.get(`/api/topics/debe`);
 };
 
+export const getDraftsApi = () => {
+  return apiClient.get('/api/drafts');
+};
+
 export const addEntryToFavoriteApi = (entryId) => {
   return apiClient.post(`/api/entries/favorities/${entryId}`);
+};
+
+export const getNaiveUsersEntries = () => {
+  return apiClient.get(`/api/topics/today/naive`);
+};
+
+export const getEntriesRelatedTag = (tagName) => {
+  return apiClient.get(`/api/topics/tag/${tagName}`);
+};
+
+export const searchApi = (query, signal) => {
+  return apiClient.get('/api/search', {
+    params: { query },
+    signal,
+  });
 };
 
 // auth
@@ -41,7 +60,7 @@ export const registerUserApi = (username, email, password, birthday, gender) => 
 };
 
 export const getRandomEntriesApi = () => {
-  return apiClient.get(`/api/entries/`);
+  return apiClient.get(`/api/entries`);
 };
 
 
@@ -79,7 +98,7 @@ export const getTopicTagsApi = () => {
 };
 
 export const insertTopicApi = (entryContent, topicTitle) => {
-  return apiClient.post('/api/topics/', {
+  return apiClient.post('/api/topics', {
     entryContent: entryContent,
     topicTitle: topicTitle,
     // userId: userId

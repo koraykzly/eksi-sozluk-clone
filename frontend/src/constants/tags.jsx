@@ -30,13 +30,17 @@ export const ALL_TAGS = [
 export const NAV_TAGS = [
   "spor",
   "ilişkiler",
+  "yaşam",
+  "tarihte bugün",
+  "dünya kupası",
+  "kripto",
   "siyaset",
   "seyehat",
   "müzik",
   "tv",
   "haber",
   "bilim",
-  "edebiyat",
   "eğitim",
   "ekonomi",
+  "başıboşlar"
 ];

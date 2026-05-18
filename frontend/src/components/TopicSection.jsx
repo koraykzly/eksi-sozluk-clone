@@ -1,50 +1,92 @@
 import "@/assets/css/Global.css";
 import { useState, useEffect } from "react";
-import { getPopularTopicsApi, getTodayTopicsApi } from "@/api/ApiService";
+import {
+  getDebeApi,
+  getDraftsApi,
+  getPopularTopicsApi,
+  getTodayTopicsApi,
+  getNaiveUsersEntries,
+  getEntriesRelatedTag,
+} from "@/api/ApiService";
 import Topic from "./Topic";
 import Debe from "./Debe";
-import { getDebeApi } from "@/api/ApiService";
 import ClickableBox from "./ClickableBox";
 
-// type: bugün, gündem, debe
+
+// type: bugün, gündem, debe, kenar
 const TopicSection = ({ type, topicSectionRef }) => {
   const [data, setData] = useState([]);
 
   const getTodayTopics = () => {
     getTodayTopicsApi().then((response) => {
-      setData(response.data);
+      setData(response.data.content);
     });
   };
 
   useEffect(() => {
+    
     if (type === "bugün") {
       getTodayTopics();
     } else if (type === "gündem") {
       getPopularTopicsApi().then((response) => {
-        setData(response.data);
+        setData(response.data.content);
       });
     } else if (type === "debe") {
       getDebeApi().then((response) => {
-        setData(response.data);
+        setData(response.data.content);
+      });
+
+    } else if (type === "kenar") {
+      getDraftsApi().then((response) => {
+        setData(response.data.content);
+      });
+    } else if (type === "çaylaklar") {
+      getNaiveUsersEntries().then((response) => {
+        setData(response.data.content);
+      });
+    } else if (type.startsWith("#")) {
+      getEntriesRelatedTag(type.slice(1)).then((response) => {
+        setData(response.data.content);
       });
     }
+
   }, [type]);
 
   var title = type;
   if (type === "debe") {
     title = "dünün en beğenilen entry'leri";
+  } else if(type === "çaylaklar") {
+    title = "çaylaklar bugün";
   }
 
   const renderList = () => {
-    if (type === "debe") {
+    if (type === "bugün") {
       return data.map((item, index) => {
-        return (
-          <Debe entryId={item.entryId} title={item.topicTitle} key={index} />
-        );
+        return <Topic id={item.topicId} title={item.topicTitle}
+          entryCount={item.entryCountSinceMidnight} key={index} />;
       });
-    } else {
+    } else if (type === "gündem") {
+      return data.map((item, index) => {
+        return <Topic id={item.topicId} title={item.topicTitle} 
+          entryCount={item.entryCountLast24Hours} key={index} />;
+      });
+    } else if (type === "debe") {
+      return data.map((item, index) => {
+        return <Debe entryId={item.entryId} title={item.topicTitle} key={index} />;
+      });     
+    } else if (type === "kenar") {
       return data.map((item, index) => {
         return <Topic id={item.topicId} title={item.topicTitle} key={index} />;
+      });
+    } else if (type === "çaylaklar") {
+      return data.map((item, index) => {
+        return <Topic id={item.topicId} title={item.topicTitle}
+          entryCount={item.entryCountSinceMidnight} key={index} />;
+      });
+    } else if (type.startsWith("#")) {
+      return data.map((item, index) => {
+        return <Topic id={item.topicId} title={item.topicTitle}
+          entryCount={item.entryCountSinceMidnight} key={index} />;
       });
     }
   };

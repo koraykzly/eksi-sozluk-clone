@@ -1,8 +1,11 @@
 package com.example.eksi.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.eksi.exceptions.UnauthorizedException;
+import jakarta.servlet.DispatcherType;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -13,19 +16,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.example.eksi.security.jwt.TokenFilter;
+import com.example.eksi.security.jwt.JwtUtils;
 import com.example.eksi.security.services.UserDetailsServiceImpl;
+import com.example.eksi.repositories.UserRepository;
 
 @Configuration
 public class BasicAuthSecurityConfiguration {
 
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
+
+    private final HandlerExceptionResolver exceptionResolver;
+
+    public BasicAuthSecurityConfiguration(UserDetailsServiceImpl userDetailsService,
+                                          @Qualifier("handlerExceptionResolver")
+                                          HandlerExceptionResolver exceptionResolver) {
+        this.userDetailsService = userDetailsService;
+        this.exceptionResolver = exceptionResolver;
+    }
 
     @Bean
-    TokenFilter authenticationJwtTokenFilter() {
-        return new TokenFilter();
+    TokenFilter authenticationJwtTokenFilter(JwtUtils jwtUtils, UserRepository userRepository) {
+        return new TokenFilter(jwtUtils, userRepository);
     }
 
     @Bean
@@ -46,21 +60,40 @@ public class BasicAuthSecurityConfiguration {
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http, TokenFilter tokenFilter) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers("/api/topics/tags").permitAll()
-                        .requestMatchers("/api/topics/popular").permitAll()
-                        .requestMatchers("/api/topics/id/**").permitAll()
-                        .requestMatchers("/api/entries/**").permitAll()
-                        .anyRequest().authenticated());
+            .sessionManagement(session ->
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                .requestMatchers("/api/auth/login", "/api/auth/signup", "/api/auth/refresh").permitAll()
+                .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                .requestMatchers("/api/search/**").permitAll()
+                .requestMatchers("/api/users/*/entries").permitAll()
+                .requestMatchers("/api/users/*/favorites").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/tags").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/topics/*/tags").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/topics/debe").permitAll()
+                .requestMatchers("/api/topics/popular").permitAll()
+                .requestMatchers("/api/topics/id/**").permitAll()
+                .requestMatchers("/api/topics/tag/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/entries/**").permitAll()
+                .anyRequest().authenticated());
+
+        http.exceptionHandling(e -> e
+            .authenticationEntryPoint((req, res, ex) ->
+                exceptionResolver.resolveException(
+                    req,
+                    res,
+                    null,
+                    new UnauthorizedException("Authentication is required")))
+            .accessDeniedHandler((req, res, ex) ->
+                exceptionResolver.resolveException(req, res, null, ex))
+        );
 
         http.authenticationProvider(authenticationProvider());
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration corsConfig = new CorsConfiguration();

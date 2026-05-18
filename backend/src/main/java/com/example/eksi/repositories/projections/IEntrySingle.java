@@ -8,8 +8,14 @@ public interface IEntrySingle {
     public String getContent();
 
     public int getFavCount();
+
+    public boolean isIncludeLink();
+
+    public boolean isIncludeImage();
     
-    public LocalDateTime getDateTime();
+    public LocalDateTime getCreatedAt();
+
+    public LocalDateTime getUpdatedAt();
     
     public String getUsername();
 }

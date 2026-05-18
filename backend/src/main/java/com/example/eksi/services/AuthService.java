@@ -1,67 +1,130 @@
 package com.example.eksi.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.eksi.domain.FollowingTags;
+import com.example.eksi.domain.Tag;
 import com.example.eksi.domain.User;
 import com.example.eksi.domain.enums.ERole;
+import com.example.eksi.domain.keys.FollowingTagsKey;
+import com.example.eksi.exceptions.NotFoundException;
 import com.example.eksi.exceptions.SignupException;
 import com.example.eksi.payload.request.LoginRequest;
+import com.example.eksi.payload.request.RefreshTokenRequest;
 import com.example.eksi.payload.request.SignupRequest;
 import com.example.eksi.payload.response.JwtPair;
+import com.example.eksi.payload.response.SignupResponse;
+import com.example.eksi.repositories.FollowingTagsRepository;
+import com.example.eksi.repositories.TagRepository;
 import com.example.eksi.repositories.UserRepository;
 import com.example.eksi.security.jwt.JwtUtils;
+import com.example.eksi.security.services.UserDetailsImpl;
 
 //AuthService.java
 @Service
 public class AuthService {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder encoder;
+    private final TagRepository tagRepository;
 
-    @Autowired
-    JwtUtils jwtUtils;
+    private final FollowingTagsRepository followingTagsRepository;
+
+    private final PasswordEncoder encoder;
+
+    private final JwtUtils jwtUtils;
+
+    public AuthService(AuthenticationManager authenticationManager,
+                       UserRepository userRepository,
+                       TagRepository tagRepository,
+                       FollowingTagsRepository followingTagsRepository,
+                       PasswordEncoder encoder,
+                       JwtUtils jwtUtils) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.tagRepository = tagRepository;
+        this.followingTagsRepository = followingTagsRepository;
+        this.encoder = encoder;
+        this.jwtUtils = jwtUtils;
+    }
 
     public JwtPair login(LoginRequest loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(), loginRequest.getPassword()));
-
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return jwtUtils.generateJwtPair(authentication);
     }
 
-    public boolean register(SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            throw new SignupException("Username is already taken!");
+    public JwtPair refresh(RefreshTokenRequest refreshTokenRequest) {
+        String refreshToken = refreshTokenRequest.getRefresh();
+        if (!jwtUtils.validateJwtToken(refreshToken)) {
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+        if (!jwtUtils.isRefreshToken(refreshToken)) {
+            throw new IllegalArgumentException("Invalid refresh token");
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new SignupException("Email is already taken!");
+        String username = jwtUtils.getUserNameFromJwtToken(refreshToken);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        UserDetailsImpl userDetails = UserDetailsImpl.build(user);
+
+        return jwtUtils.generateJwtPair(userDetails);
+    }
+
+    @Transactional
+    public SignupResponse register(SignupRequest signUpRequest) {
+        String username = signUpRequest.getUsername().trim().toLowerCase();
+        String email = signUpRequest.getEmail().trim().toLowerCase();
+
+        if (userRepository.existsByUsernameIgnoreCase(username)) {
+            throw new SignupException(
+                    "Signup failed",
+                    Map.of("username", "Username is already taken"));
+        }
+
+        if (userRepository.existsByEmailIgnoreCase(email)) {
+            throw new SignupException(
+                    "Signup failed",
+                    Map.of("email", "Email is already taken"));
         }
 
         User user = new User(
-                signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
+                username,
+                email,
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getBirthday(),
                 signUpRequest.getGender(),
                 ERole.NAIVE);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        followAllTags(savedUser);
 
-        return true;
+        return new SignupResponse(
+                "User registered successfully",
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getEmail());
+    }
+
+    private void followAllTags(User user) {
+        for (Tag tag : tagRepository.findAll()) {
+            FollowingTags followingTags = new FollowingTags();
+            followingTags.setId(new FollowingTagsKey(user.getId(), tag.getId()));
+            followingTags.setUser(user);
+            followingTags.setTag(tag);
+            followingTagsRepository.save(followingTags);
+        }
     }
 
 }

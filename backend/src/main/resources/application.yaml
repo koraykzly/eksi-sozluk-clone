@@ -2,6 +2,13 @@ spring:
   application:
     name: eksi
 
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+  web:
+    resources:
+      add-mappings: false
+
   datasource:
     url: jdbc:postgresql://localhost:5432/testdb_eksi
     username: testuser_eksi
@@ -10,6 +17,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    defer-datasource-initialization: true
     # show-sql: true
 
   # sql:
@@ -26,6 +34,11 @@ spring:
       host: localhost
       port: 6379
 
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
 management:
   endpoints:
     web:
@@ -35,6 +48,13 @@ management:
 jwt:
   secret: deba9893aca64f00b097a8b074ffa346deba9893aca64f00b097a8b074ffa346
   access:
-    expirationMin: 120
+    expirationMin: 140
   refresh:
     expirationMin: 1440
+
+app:
+  upload:
+    root: uploads
+    public-url-prefix: /uploads
+    profile-image:
+      max-size-bytes: 2097152

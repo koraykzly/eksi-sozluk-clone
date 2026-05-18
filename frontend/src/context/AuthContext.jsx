@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-import { apiClient } from "@/api/apiClient";
 import { authenticateUserApi } from "@/api/ApiService";
 import { useEffect } from "react";
 
@@ -21,16 +20,6 @@ export default function AuthProvider({ children }) {
 
       const username = localStorage.getItem("userData");
       setUsername(JSON.parse(username));
-
-      const jwtToken = "Bearer " + storedToken;
-      apiClient.interceptors.request.use((config) => {
-        config.headers.Authorization = jwtToken;
-        return config;
-      });
-
-      apiClient.interceptors.response.use((config) => {
-        return config;
-      });
     } else {
       setAuthenticated(false);
     }
@@ -43,22 +32,12 @@ export default function AuthProvider({ children }) {
       if (response.status === 200) {
 
         localStorage.setItem("accessToken", response.data.access);
+        localStorage.setItem("refreshToken", response.data.refresh);
         localStorage.setItem(
           "userData",
           JSON.stringify(response.data.username)
         );
 
-        const jwtToken = "Bearer " + response.data.access;
-        apiClient.interceptors.request.use((config) => {
-          config.headers.Authorization = jwtToken;
-          return config;
-        });
-
-        apiClient.interceptors.response.use((config) => {
-          return config;
-        });
-
-        
         setAuthenticated(true);
         setUsername(response.data.username);
 
@@ -79,6 +58,7 @@ export default function AuthProvider({ children }) {
     setUsername(null);
     localStorage.removeItem("userData");
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
   }
 
   return (

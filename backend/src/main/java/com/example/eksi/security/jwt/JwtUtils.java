@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.example.eksi.payload.response.JwtPair;
@@ -20,6 +21,9 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    private static final String TOKEN_TYPE_CLAIM = "tokenType";
+    private static final String ACCESS_TOKEN_TYPE = "access";
+    private static final String REFRESH_TOKEN_TYPE = "refresh";
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -32,34 +36,64 @@ public class JwtUtils {
 
     public JwtBuilder generateJwtBase(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        return generateJwtBase(userPrincipal.getUsername());
+    }
+
+    public JwtBuilder generateJwtBase(UserDetails userDetails) {
+        return generateJwtBase(userDetails.getUsername());
+    }
+
+    private JwtBuilder generateJwtBase(String username) {
         return Jwts.builder()
-                .subject(userPrincipal.getUsername())
+                .subject(username)
                 .issuedAt(new Date())
                 .signWith(key());
     }
 
     public String generateAccessToken(Authentication authentication) {
         return generateJwtBase(authentication)
-                .expiration(new Date((new Date()).getTime() + getMilisecond(jwtAccessExpirationMin)))
+                .claim(TOKEN_TYPE_CLAIM, ACCESS_TOKEN_TYPE)
+                .expiration(new Date((new Date()).getTime() + getMillisecond(jwtAccessExpirationMin)))
                 .compact();
     }
 
     public String generateRefreshToken(Authentication authentication) {
         return generateJwtBase(authentication)
-                .expiration(new Date((new Date()).getTime() + getMilisecond(jwtRefreshExpirationMin)))
+                .claim(TOKEN_TYPE_CLAIM, REFRESH_TOKEN_TYPE)
+                .expiration(new Date((new Date()).getTime() + getMillisecond(jwtRefreshExpirationMin)))
+                .compact();
+    }
+
+    public String generateAccessToken(UserDetails userDetails) {
+        return generateJwtBase(userDetails)
+                .claim(TOKEN_TYPE_CLAIM, ACCESS_TOKEN_TYPE)
+                .expiration(new Date((new Date()).getTime() + getMillisecond(jwtAccessExpirationMin)))
+                .compact();
+    }
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        return generateJwtBase(userDetails)
+                .claim(TOKEN_TYPE_CLAIM, REFRESH_TOKEN_TYPE)
+                .expiration(new Date((new Date()).getTime() + getMillisecond(jwtRefreshExpirationMin)))
                 .compact();
     }
 
     public JwtPair generateJwtPair(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
         return new JwtPair(
                 generateAccessToken(authentication),
                 generateRefreshToken(authentication),
                 userPrincipal.getUsername());
     }
 
-    private long getMilisecond(int minute) {
+    public JwtPair generateJwtPair(UserDetails userDetails) {
+        return new JwtPair(
+                generateAccessToken(userDetails),
+                generateRefreshToken(userDetails),
+                userDetails.getUsername());
+    }
+
+    private long getMillisecond(int minute) {
         return minute * 60 * 1000L;
     }
 
@@ -68,31 +102,37 @@ public class JwtUtils {
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser()
-                .verifyWith((javax.crypto.SecretKey) key())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        return getClaims(token).getSubject();
+    }
+
+    public boolean isAccessToken(String token) {
+        return ACCESS_TOKEN_TYPE.equals(getClaims(token).get(TOKEN_TYPE_CLAIM, String.class));
+    }
+
+    public boolean isRefreshToken(String token) {
+        return REFRESH_TOKEN_TYPE.equals(getClaims(token).get(TOKEN_TYPE_CLAIM, String.class));
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser()
-                    .verifyWith((javax.crypto.SecretKey) key())
-                    .build()
-                    .parseSignedClaims(authToken);
+                .verifyWith((javax.crypto.SecretKey) key())
+                .build()
+                .parseSignedClaims(authToken);
             return true;
-        } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
+        } catch (JwtException e) {
+            logger.error("JWT exception: {}", e.getMessage());
         }
-
         return false;
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+            .verifyWith((javax.crypto.SecretKey) key())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
     }
 }

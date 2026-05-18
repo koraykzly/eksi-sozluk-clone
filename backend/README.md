@@ -6,6 +6,4 @@
 
 ### Populate Database
 
-Wait until the database up, then
-
-    docker exec -i postgres psql -U testuser_eksi -d testdb_eksi -f /sample_data.sql > /dev/null
+Backend automatically populates the database if it's empty.

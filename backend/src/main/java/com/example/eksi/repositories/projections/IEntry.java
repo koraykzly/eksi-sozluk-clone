@@ -13,7 +13,13 @@ public interface IEntry {
 
     public int getFavCount();
 
-    public LocalDateTime getDateTime();
+    public boolean isIncludeLink();
+
+    public boolean isIncludeImage();
+
+    public LocalDateTime getCreatedAt();
+
+    public LocalDateTime getUpdatedAt();
 
     public String getUsername();
 }

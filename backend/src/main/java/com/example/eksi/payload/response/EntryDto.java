@@ -3,16 +3,27 @@ package com.example.eksi.payload.response;
 import java.time.LocalDateTime;
 
 public class EntryDto {
-    Long id;
+    private Long id;
     private String content;
     private String title;
     private int upvoted;
     private int downvoted;
     private int favCount;
-    private LocalDateTime dateTime;
+    private boolean includeLink;
+    private boolean includeImage;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public EntryDto() {
         super();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getContent() {
@@ -23,12 +34,12 @@ public class EntryDto {
         this.content = content;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public int getUpvoted() {
@@ -53,6 +64,30 @@ public class EntryDto {
 
     public void setFavCount(int favCount) {
         this.favCount = favCount;
+    }
+
+    public boolean isIncludeLink() {
+        return includeLink;
+    }
+
+    public void setIncludeLink(boolean includeLink) {
+        this.includeLink = includeLink;
+    }
+
+    public boolean isIncludeImage() {
+        return includeImage;
+    }
+
+    public void setIncludeImage(boolean includeImage) {
+        this.includeImage = includeImage;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getTitle() {

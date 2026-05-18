@@ -2,15 +2,7 @@ package com.example.eksi.domain;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -22,7 +14,7 @@ public class Topic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 1, message = "Enter atleast 1 character")
+    @Size(min = 1, message = "Enter at least 1 character")
     @Size(max = 256, message = "Enter maximum 256 characters")
     @Column(unique = true)
     private String title;
@@ -41,11 +33,13 @@ public class Topic {
     private int entryCountSinceMidnight;
 
     public Topic(Long id,
-            @Size(min = 1, message = "Enter atleast 1 character") @Size(max = 256, message = "Enter maximum 256 characters") String title,
-            @NotNull LocalDateTime createdDatetime, User user, LocalDateTime lastEntered, int entryCountSinceMidnight) {
+            @Size(min = 1, message = "Enter at least 1 character")
+            @Size(max = 256, message = "Enter maximum 256 characters") String title,
+            @NotNull LocalDateTime createdDatetime,
+                 User user, LocalDateTime lastEntered, int entryCountSinceMidnight) {
         super();
         this.id = id;
-        this.title = title;
+        setTitle(title);
         this.createdDatetime = createdDatetime;
         this.user = user;
         this.lastEntered = lastEntered;
@@ -53,10 +47,11 @@ public class Topic {
     }
 
     public Topic(
-            @Size(min = 1, message = "Enter atleast 1 character") @Size(max = 256, message = "Enter maximum 256 characters") String title,
+            @Size(min = 1, message = "Enter at least 1 character")
+            @Size(max = 256, message = "Enter maximum 256 characters") String title,
             User user) {
         super();
-        this.title = title;
+        setTitle(title);
         this.user = user;
     }
 
@@ -84,7 +79,11 @@ public class Topic {
     }
 
     public void setTitle(String title) {
-        this.title = title.toLowerCase();
+        this.title = normalizeTitle(title);
+    }
+
+    private String normalizeTitle(String title) {
+        return title == null ? null : title.trim().toLowerCase();
     }
 
     public LocalDateTime getLastEntered() {
@@ -103,9 +102,7 @@ public class Topic {
         this.entryCountSinceMidnight = entryCountSinceMidnight;
     }
 
-    public int increaseEntryCountSinceMidnight() {
+    public void increaseEntryCountSinceMidnight() {
         this.entryCountSinceMidnight++;
-        return this.entryCountSinceMidnight;
     }
-
 }

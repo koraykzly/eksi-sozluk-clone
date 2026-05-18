@@ -102,3 +102,6 @@ build/
 target/
 .idea/
 *.iml
+
+uploads/profile-images/*
+!uploads/profile-images/default-profile-picture-light.jpg

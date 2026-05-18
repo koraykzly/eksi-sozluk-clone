@@ -7,28 +7,40 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import EntryDropDownMenu from "./EntryDropDownMenu";
 
-function formatDate(inputDate) {
-  const date = new Date(inputDate);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${year}.${month}.${day} ${hours}:${minutes}`;
+function formatDateTime(value) {
+  const date = new Date(value);
+
+  return {
+    year: date.getFullYear(),
+    month: String(date.getMonth() + 1).padStart(2, "0"),
+    day: String(date.getDate()).padStart(2, "0"),
+    hours: String(date.getHours()).padStart(2, "0"),
+    minutes: String(date.getMinutes()).padStart(2, "0"),
+  };
+}
+
+function formatDate(createdAt, updatedAt) {
+  const created = formatDateTime(createdAt);
+
+  let result = `${created.year}.${created.month}.${created.day} ${created.hours}:${created.minutes}`;
+
+  if (updatedAt != null) {
+    const updated = formatDateTime(updatedAt);
+
+    const isSameDay =
+      created.year === updated.year &&
+      created.month === updated.month &&
+      created.day === updated.day;
+
+    result += isSameDay
+      ? ` ~ ${updated.hours}:${updated.minutes}`
+      : ` ~ ${updated.year}.${updated.month}.${updated.day} ${updated.hours}:${updated.minutes}`;
+  }
+
+  return result;
 }
 
 const Entry = ({ data }) => {
-  // temp data
-  if (data === undefined) {
-    data = {
-      id: 1,
-      content: "lorem ipsum",
-      username: "koraykzly",
-      datetime: "14.10.2023 20:24",
-      favCount: 5,
-    };
-  }
-
   const [menu, openMenu] = useState(false);
 
   return (
@@ -66,7 +78,7 @@ const Entry = ({ data }) => {
             {data.username}
           </Link>
           <Link to={`/entry/${data.id}`} className="user-datetime">
-            {formatDate(data.dateTime)}
+            {formatDate(data.createdAt, data.updatedAt)}
           </Link>
         </div>
       </div>

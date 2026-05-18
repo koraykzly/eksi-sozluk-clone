@@ -1,10 +1,22 @@
 package com.example.eksi.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.example.eksi.domain.Tag;
+import com.example.eksi.exceptions.UnauthorizedException;
+import com.example.eksi.payload.request.InsertTopicRequest;
+import com.example.eksi.payload.request.PaginationRequest;
+import com.example.eksi.payload.response.EntryDto;
+import com.example.eksi.payload.response.TopicEntries;
+import com.example.eksi.repositories.projections.IDebe;
+import com.example.eksi.repositories.projections.IEntryWithUsername;
+import com.example.eksi.repositories.projections.IPopularTopic;
+import com.example.eksi.repositories.projections.ITopic;
+import com.example.eksi.security.services.UserDetailsImpl;
+import com.example.eksi.services.EntryService;
+import com.example.eksi.services.TopicService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,69 +25,80 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.eksi.domain.Tag;
-import com.example.eksi.payload.request.InsertTopicRequest;
-import com.example.eksi.payload.response.EntryDto;
-import com.example.eksi.payload.response.TopicEntries;
-import com.example.eksi.repositories.projections.IDebe;
-import com.example.eksi.repositories.projections.ITopic;
-import com.example.eksi.security.services.UserDetailsImpl;
-import com.example.eksi.services.EntryService;
-import com.example.eksi.services.TopicService;
-
-import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/topics")
 public class TopicController {
 
-    @Autowired
-    private TopicService topicService;
+    private final TopicService topicService;
+    private final EntryService entryService;
 
-    @Autowired
-    private EntryService entryService;
-
-    @GetMapping(value = "/today")
-    public List<ITopic> getTodayTopics() {
-        return topicService.getTodayTopics();
+    public TopicController(TopicService topicService, EntryService entryService) {
+        this.topicService = topicService;
+        this.entryService = entryService;
     }
 
-    @GetMapping(value = "/popular")
-    public List<ITopic> getPopularTopics() {
-        return topicService.getPopularTopics();
+    @GetMapping("/today")
+    public Page<ITopic> getTodayTopics(
+            @AuthenticationPrincipal UserDetailsImpl user,
+            @Valid PaginationRequest pagination) {
+        return topicService.getTodayTopics(user.getId(), pagination);
     }
 
-    @GetMapping(value = "/tags")
-    public List<Tag> getTopicTags() {
-        return topicService.getTopicTags();
+    @GetMapping("/today/naive")
+    public Page<ITopic> getTodayTopicsFromNaiveUsers(@Valid PaginationRequest pagination) {
+        return topicService.getTodayTopicsFromNaiveUsers(pagination);
     }
 
-    @PostMapping(value = "/")
-    public EntryDto insertTopic(@Valid @RequestBody InsertTopicRequest requestBody) {
-        Authentication authentication = SecurityContextHolder
-                .getContext().getAuthentication();
-        UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
-
-        return entryService.addEntry(
-                requestBody.getEntryContent(),
-                requestBody.getTopicTitle(),
-                user.getId());
-
+    @GetMapping("/popular")
+    public Page<IPopularTopic> getPopularTopics(@Valid PaginationRequest pagination) {
+        return topicService.getPopularTopics(pagination);
     }
 
-    @GetMapping(value = "id/{topicId}")
+    @GetMapping("/tag/{tagName}")
+    public Page<ITopic> getTopicsByTag(
+            @PathVariable String tagName,
+            @Valid PaginationRequest pagination) {
+        return topicService.getTopicsByTag(tagName, pagination);
+    }
+
+    @GetMapping("/{topicId}/tags")
+    public List<Tag> getTopicTags(@PathVariable Long topicId) {
+        return topicService.getTopicTags(topicId);
+    }
+
+    @PostMapping
+    public EntryDto insertTopic(@Valid @RequestBody InsertTopicRequest requestBody,
+                                @AuthenticationPrincipal UserDetailsImpl user) {
+        return entryService.addEntry(requestBody.getEntryContent(), requestBody.getTopicTitle(), user.getId());
+    }
+
+    @GetMapping("/id/{topicId}")
     public TopicEntries getEntriesByTopicId(
             @PathVariable Long topicId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return entryService.getEntriesByTopicId(topicId, page, size);
-
+            @RequestParam(required = false, name = "a") String action,
+            @Valid PaginationRequest pagination) {
+        return entryService.getEntriesByTopicId(topicId, action, pagination);
     }
 
-    @GetMapping(value = "/debe")
-    public List<IDebe> getDebe() {
-        return entryService.getDebe();
-
+    @GetMapping("/debe")
+    public Page<IDebe> getDebe(@RequestParam(required = false)
+                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                               @AuthenticationPrincipal UserDetailsImpl user,
+                               @Valid PaginationRequest pagination) {
+        LocalDate targetDate = (date != null) ? date : LocalDate.now().minusDays(1);
+        if (!targetDate.equals(LocalDate.now().minusDays(1)) && user == null) {
+            throw new UnauthorizedException("Authentication is required");
+        }
+        return entryService.getDebe(targetDate, pagination);
     }
 
+    @GetMapping("/following")
+    public Page<IEntryWithUsername> getFollowingUserEntries(
+        @AuthenticationPrincipal UserDetailsImpl user,
+        @Valid PaginationRequest pagination) {
+        return entryService.getFollowingUserEntries(user.getUsername(), pagination);
+    }
 }

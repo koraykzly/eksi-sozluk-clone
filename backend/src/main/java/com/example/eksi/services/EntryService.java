@@ -1,16 +1,16 @@
 package com.example.eksi.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.example.eksi.payload.request.PaginationRequest;
+import com.example.eksi.repositories.projections.IEntryWithUsername;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.eksi.domain.Entry;
@@ -21,6 +21,7 @@ import com.example.eksi.domain.keys.FavoriteEntriesKey;
 import com.example.eksi.exceptions.NotFoundException;
 import com.example.eksi.payload.response.EntryDto;
 import com.example.eksi.payload.response.TopicEntries;
+import com.example.eksi.repositories.DraftEntryRepository;
 import com.example.eksi.repositories.EntryRepository;
 import com.example.eksi.repositories.FavoriteEntriesRepository;
 import com.example.eksi.repositories.TopicRepository;
@@ -36,23 +37,35 @@ public class EntryService {
 
     private static final Logger logger = LoggerFactory.getLogger(EntryService.class);
 
-    @Autowired
-    TopicRepository topicRepository;
+    private final TopicRepository topicRepository;
 
-    @Autowired
-    EntryRepository entryRepository;
+    private final EntryRepository entryRepository;
 
-    @Autowired
-    FavoriteEntriesRepository favoriteEntriesRepository;
+    private final FavoriteEntriesRepository favoriteEntriesRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    private final DraftEntryRepository draftEntryRepository;
 
-    @Autowired
-    ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
-    @Autowired
-    Pattern urlCheckerPattern;
+    private final ModelMapper modelMapper;
+
+    private final Pattern urlCheckerPattern;
+
+    public EntryService(TopicRepository topicRepository,
+                        EntryRepository entryRepository,
+                        FavoriteEntriesRepository favoriteEntriesRepository,
+                        DraftEntryRepository draftEntryRepository,
+                        UserRepository userRepository,
+                        ModelMapper modelMapper,
+                        Pattern urlCheckerPattern) {
+        this.topicRepository = topicRepository;
+        this.entryRepository = entryRepository;
+        this.favoriteEntriesRepository = favoriteEntriesRepository;
+        this.draftEntryRepository = draftEntryRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+        this.urlCheckerPattern = urlCheckerPattern;
+    }
 
     public List<Topic> searchInEntries(String keyword) {
         return null;
@@ -75,6 +88,8 @@ public class EntryService {
         topic.increaseEntryCountSinceMidnight();
 
         Entry entry = entryRepository.save(new Entry(content, isIncludeLink, topic, user));
+        draftEntryRepository.findByUserIdAndTopicId(userId, topicId)
+                .ifPresent(draftEntryRepository::delete);
 
         EntryDto entryDto = modelMapper.map(entry, EntryDto.class);
         entryDto.setTitle(topic.getTitle());
@@ -84,9 +99,9 @@ public class EntryService {
     // add entry with create topic
     @Transactional
     public EntryDto addEntry(String content, String topicTitle, Long userId) {
+        String normalizedTopicTitle = normalizeTopicTitle(topicTitle);
 
-        // if entry already exists
-        Topic topic = topicRepository.findByTitle(topicTitle).orElse(null);
+        Topic topic = topicRepository.findByTitleIgnoreCase(normalizedTopicTitle).orElse(null);
         if (topic != null) {
             return addEntry(content, topic.getId(), userId);
         }
@@ -94,7 +109,7 @@ public class EntryService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("User not found"));
 
-        topic = new Topic(topicTitle, user);
+        topic = new Topic(normalizedTopicTitle, user);
         topic = topicRepository.save(topic);
 
         boolean isIncludeLink = checkContentIncludeLink(content);
@@ -104,6 +119,10 @@ public class EntryService {
         entryDto.setTitle(topic.getTitle());
         return entryDto;
 
+    }
+
+    private String normalizeTopicTitle(String topicTitle) {
+        return topicTitle.trim().toLowerCase();
     }
 
     private boolean checkContentIncludeLink(String content) {
@@ -116,8 +135,7 @@ public class EntryService {
 
     }
 
-    public IEntry addEntryToFavorities(Long userId, Long entryId) {
-
+    public IEntry addEntryToFavorites(Long userId, Long entryId) {
         User user = new User();
         user.setId(userId);
 
@@ -128,42 +146,67 @@ public class EntryService {
         id.setEntryId(entryId);
         id.setUserId(userId);
 
-        EntryFavorited favoritedEntry = new EntryFavorited();
-        favoritedEntry.setId(id);
-        favoritedEntry.setUser(user);
-        favoritedEntry.setEntry(entry);
+        EntryFavorited favoriteEntry = new EntryFavorited();
+        favoriteEntry.setId(id);
+        favoriteEntry.setUser(user);
+        favoriteEntry.setEntry(entry);
 
-        favoriteEntriesRepository.save(favoritedEntry);
+        favoriteEntriesRepository.save(favoriteEntry);
 
         return entryRepository.findByIdWithTopicTitle(entryId).orElse(null);
     }
 
-    public TopicEntries getEntriesByTopicId(Long topicId, int page, int size) {
+    public TopicEntries getEntriesByTopicId(Long topicId, PaginationRequest pagination) {
+        return getEntriesByTopicId(topicId, null, pagination);
+    }
+
+    public TopicEntries getEntriesByTopicId(Long topicId, String action, PaginationRequest pagination) {
         Topic topic = topicRepository.findById(topicId).orElseThrow(
                 () -> new NotFoundException("Topic not found"));
 
-        Sort sort = Sort.by(Sort.Direction.ASC, "dateTime");
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
-        Page<IEntrySingle> entries = entryRepository.findAllByTopicId(topicId, pageRequest);
+        Page<IEntrySingle> entries;
+        if ("popular".equals(action)) {
+            entries = entryRepository.findRecentByTopicId(
+                    topicId,
+                    LocalDateTime.now().minusHours(24),
+                    pagination.toPageRequest()
+            );
+        } else if ("today".equals(action)) {
+            entries = entryRepository.findRecentByTopicId(
+                    topicId,
+                    LocalDate.now().atStartOfDay(),
+                    pagination.toPageRequest()
+            );
+        } else {
+            entries = entryRepository.findAllByTopicId(topicId, pagination.toPageRequest());
+        }
 
         return new TopicEntries(topic.getId(), topic.getTitle(), entries);
 
     }
 
-    public Page<IEntry> getEntriesByUsernameWithPagination(String username) {
-        Sort sort = Sort.by(Sort.Direction.ASC, "dateTime");
-        PageRequest pageRequest = PageRequest.of(0, 10, sort);
-        return entryRepository.findAllByUsernameWithPage(username, pageRequest);
+    public Page<IEntry> getEntriesByUsernameWithPagination(String username, PaginationRequest pagination) {
+        return entryRepository.findAllByUsernameWithPage(username, pagination.toPageRequest());
 
     }
     
-    public List<IEntry> getRandomEntries() {
-        return entryRepository.findRandomEntriesWithFavCountGreaterThan(40);
-        
-    }
-    
-    public List<IDebe> getDebe() {
-        return entryRepository.findMostUpvotedEntryTopicsFromYesterday();
+    public Page<IEntry> getRandomEntries(PaginationRequest pagination) {
+        return entryRepository.findRandomEntriesWithFavCountGreaterThan(
+            40, pagination.toPageRequest(11));
     }
 
+    public Page<IDebe> getDebe(LocalDate date, PaginationRequest pagination) {
+        LocalDateTime start = date.atStartOfDay();
+        LocalDateTime end = date.plusDays(1).atStartOfDay();
+
+        return entryRepository.findMostUpvotedEntryTopicsByDate(
+                start,
+                end,
+                pagination.toPageRequest(25)
+        );
+    }
+
+    public Page<IEntryWithUsername> getFollowingUserEntries(String username, PaginationRequest pagination) {
+        return entryRepository.findFollowingUserEntries(username, pagination.toPageRequest());
+    }
 }

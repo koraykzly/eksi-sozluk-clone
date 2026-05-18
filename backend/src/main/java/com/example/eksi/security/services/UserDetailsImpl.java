@@ -3,6 +3,7 @@ package com.example.eksi.security.services;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -13,18 +14,16 @@ import com.example.eksi.domain.enums.ERole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDetailsImpl implements UserDetails {
+
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-
-    private String username;
-
-    private String email;
-
+    private final Long id;
+    private final String username;
+    private final String email;
     @JsonIgnore
-    private String password;
-
-    private ERole role;
+    private final String password;
+    private final ERole role;
 
     public UserDetailsImpl(Long id, String username, String email, String password, ERole role) {
         this.id = id;

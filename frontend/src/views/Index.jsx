@@ -10,8 +10,7 @@ const Index = () => {
 
   useEffect(() => {
     getRandomEntriesApi().then((res) => {
-      console.log(res);
-      setData(res.data);
+      setData(res.data.content);
     });
   }, []);
 

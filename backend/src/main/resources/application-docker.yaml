@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/testdb_eksi
+    url: jdbc:postgresql://database:5432/testdb_eksi
     username: testuser_eksi
     password: dummypass
 
@@ -8,3 +8,15 @@ spring:
     redis:
       host: redis
       port: 6379
+
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
+app:
+  upload:
+    root: /app/uploads
+    public-url-prefix: /uploads
+    profile-image:
+      max-size-bytes: 2097152

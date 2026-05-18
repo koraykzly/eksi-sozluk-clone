@@ -2,7 +2,7 @@ package com.example.eksi.domain;
 
 import java.time.LocalDateTime;
 
-import com.example.eksi.domain.keys.FollowedUsersKey;
+import com.example.eksi.domain.keys.FollowingUsersKey;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -14,11 +14,11 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "followed_users")
-public class FollowedUsers {
+@Table(name = "following_users")
+public class FollowingUsers {
 
     @EmbeddedId
-    private FollowedUsersKey id;
+    private FollowingUsersKey id;
 
     @ManyToOne
     @MapsId("followerUserId")
@@ -26,9 +26,9 @@ public class FollowedUsers {
     private User followerUser;
 
     @ManyToOne
-    @MapsId("followedUserId")
-    @JoinColumn(name = "followed_user_id")
-    private User followedUser;
+    @MapsId("followingUserId")
+    @JoinColumn(name = "following_user_id")
+    private User followingUser;
 
     @Column
     private LocalDateTime datetime;
@@ -38,11 +38,11 @@ public class FollowedUsers {
         this.datetime = LocalDateTime.now();
     }
 
-    public FollowedUsersKey getId() {
+    public FollowingUsersKey getId() {
         return id;
     }
 
-    public void setId(FollowedUsersKey id) {
+    public void setId(FollowingUsersKey id) {
         this.id = id;
     }
 
@@ -54,12 +54,12 @@ public class FollowedUsers {
         this.followerUser = followerUser;
     }
 
-    public User getFollowedUser() {
-        return followedUser;
+    public User getFollowingUser() {
+        return followingUser;
     }
 
-    public void setFollowedUser(User followedUser) {
-        this.followedUser = followedUser;
+    public void setFollowingUser(User followingUser) {
+        this.followingUser = followingUser;
     }
 
     public LocalDateTime getDatetime() {

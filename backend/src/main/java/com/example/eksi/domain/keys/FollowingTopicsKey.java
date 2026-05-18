@@ -1,5 +1,6 @@
 package com.example.eksi.domain.keys;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,7 +8,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class FollowedTopicsKey implements Serializable {
+public class FollowingTopicsKey implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 2191281080884427495L;
 
     @Column(name = "user_id")
@@ -16,11 +19,11 @@ public class FollowedTopicsKey implements Serializable {
     @Column(name = "topic_id")
     Long topicId;
 
-    public FollowedTopicsKey() {
+    public FollowingTopicsKey() {
         super();
     }
 
-    public FollowedTopicsKey(Long userId, Long topicId) {
+    public FollowingTopicsKey(Long userId, Long topicId) {
         super();
         this.userId = userId;
         this.topicId = topicId;
@@ -55,7 +58,7 @@ public class FollowedTopicsKey implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        FollowedTopicsKey other = (FollowedTopicsKey) obj;
+        FollowingTopicsKey other = (FollowingTopicsKey) obj;
         return Objects.equals(topicId, other.topicId) && Objects.equals(userId, other.userId);
     }
 

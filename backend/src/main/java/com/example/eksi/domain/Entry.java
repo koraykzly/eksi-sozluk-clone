@@ -4,17 +4,7 @@ import java.time.LocalDateTime;
 
 import com.example.eksi.domain.enums.ERole;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -30,12 +20,17 @@ public class Entry {
     private String content;
 
     @NotNull
-    private LocalDateTime dateTime;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    private LocalDateTime lastEdited;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @NotNull
     private boolean isIncludeLink;
+
+    @NotNull
+    private boolean isIncludeImage;
 
     @NotNull
     @Enumerated(EnumType.ORDINAL)
@@ -48,22 +43,28 @@ public class Entry {
     @Column
     private int favCount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @PrePersist
     public void prePersist() {
-        this.dateTime = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Entry(@Size(min = 1, max = 51200) String content, @NotNull boolean isIncludeLink, Topic topic, User user) {
         super();
-        this.content = content.toLowerCase();
+        setContent(content);
         this.isIncludeLink = isIncludeLink;
+        this.isIncludeImage = false;
         this.topic = topic;
         this.user = user;
         this.upvoted = 0;
@@ -89,15 +90,19 @@ public class Entry {
     }
 
     public void setContent(String content) {
-        this.content = content.toLowerCase();
+        this.content = normalizeContent(content);
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    private String normalizeContent(String content) {
+        return content == null ? null : content.toLowerCase();
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public boolean isIncludeLink() {
@@ -106,6 +111,14 @@ public class Entry {
 
     public void setIncludeLink(boolean isIncludeLink) {
         this.isIncludeLink = isIncludeLink;
+    }
+
+    public boolean isIncludeImage() {
+        return isIncludeImage;
+    }
+
+    public void setIncludeImage(boolean isIncludeImage) {
+        this.isIncludeImage = isIncludeImage;
     }
 
     public ERole getWrittenByRole() {
@@ -156,12 +169,12 @@ public class Entry {
         this.user = user;
     }
 
-    public LocalDateTime getLastEdited() {
-        return lastEdited;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setLastEdited(LocalDateTime lastEdited) {
-        this.lastEdited = lastEdited;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

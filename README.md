@@ -8,12 +8,11 @@ Ekşi sözlük clone project just for practice on <b>Spring Boot</b> and <b>Reac
 
     docker compose up -d
 
+and go to http://localhost:5173/
 
 ### Populate Database
 
-Wait until the database up, then
-
-    docker exec -i postgres psql -U testuser_eksi -d testdb_eksi -f /sample_data.sql > /dev/null
+Backend automatically populates the database if it's empty.
 
 
 ## To Do List

@@ -1,42 +1,52 @@
 package com.example.eksi.runners;
 
-import java.time.LocalDate;
+import java.sql.Connection;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
 
 import com.example.eksi.repositories.UserRepository;
-import com.example.eksi.domain.User;
-import com.example.eksi.domain.enums.*;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.sql.DataSource;
 
 @Component
 public class PopulateDatabase implements CommandLineRunner {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final Logger log = LoggerFactory.getLogger(PopulateDatabase.class);
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+
+    private final DataSource dataSource;
+
+    public PopulateDatabase(UserRepository userRepository, DataSource dataSource) {
+        this.userRepository = userRepository;
+        this.dataSource = dataSource;
+    }
 
     @Override
-    public void run(String... args) throws Exception {
+    @Transactional
+    public void run(String @NonNull ... args) throws Exception {
 
-        if (userRepository.findByUsername("johndoe").isEmpty()) {
-            User user1 = new User("johndoe", "johndoe@example.com",
-                    passwordEncoder.encode("dummy"),
-                    LocalDate.now(), EGender.MALE, ERole.USER);
-            userRepository.save(user1);
-
-            System.out.println("User generated: " + user1);
-
-            user1 = userRepository.findByUsername(user1.getUsername()).orElse(null);
-            System.out.println("User fetched: " + user1);
-
-        } else {
-            System.out.println("User already exists: johndoe");
+        try (Connection connection = dataSource.getConnection()) {
+            log.info("Database URL: {}", connection.getMetaData().getURL());
+            log.info("Database User: {}", connection.getMetaData().getUserName());
         }
 
+        if (userRepository.count() == 0) {
+            log.info("[sample-data.sql] Executing to populate database...");
+            ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+            populator.addScript(new ClassPathResource("sample-data.sql"));
+            populator.execute(dataSource);
+
+            log.info("[sample-data.sql] Database populated.");
+        } else {
+            log.info("Database is not empty so was not populated again.");
+        }
     }
 }

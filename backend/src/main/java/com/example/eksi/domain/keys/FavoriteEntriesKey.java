@@ -1,5 +1,6 @@
 package com.example.eksi.domain.keys;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class FavoriteEntriesKey implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -9149059266368185663L;
 
     @Column(name = "user_id")

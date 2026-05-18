@@ -25,12 +25,12 @@ public class Tag {
     public Tag(short id, @NotNull String name) {
         super();
         this.id = id;
-        this.name = name;
+        setName(name);
     }
 
     public Tag(@NotNull String name) {
         super();
-        this.name = name;
+        setName(name);
     }
 
     public Tag() {
@@ -50,7 +50,11 @@ public class Tag {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = normalizeName(name);
+    }
+
+    private String normalizeName(String name) {
+        return name == null ? null : name.trim().toLowerCase();
     }
 
 }
